@@ -1,0 +1,15 @@
+001,用户管理:QuickWebApi.Sample.Apis-1.0.0.0-
+001,http://localhost:11520/api/icompany_service/info,,
+002,http://localhost:11520/api/icompany_service/all,,
+003,http://localhost:11520/api/icompany_service/remove,,
+
+002,用户管理:QuickWebApi.Sample.Apis-1.0.0.0-
+001,http://localhost:11520/api/customer_service/list,用户列表,列举用户信息
+002,http://localhost:11520/api/customer_service/info,,
+003,http://localhost:11520/api/customer_service/all,,
+004,http://localhost:11520/api/customer_service/pick,,
+005,http://localhost:11520/api/customer_service/update,,
+006,http://localhost:11520/api/customer_service/del,,
+007,http://localhost:11520/api/customer_service/delage,,
+008,http://localhost:11520/api/customer_service/save,,
+

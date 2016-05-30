@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuickWebApi.Declaration
+namespace QuickWebApi
 {
     public enum MethodType
     {
@@ -35,7 +35,6 @@ namespace QuickWebApi.Declaration
         { }
         public QuickWebApiAttribute(string service, string route, MethodType methodtype = MethodType.NONE, string name = null, string comment = null)
         {
-            //if (string.IsNullOrWhiteSpace(server)) throw new ArgumentNullException("server can not be empty");
             _service = service;
             _name = name;
             _comment = comment;

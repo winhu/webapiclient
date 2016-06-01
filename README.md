@@ -1,12 +1,16 @@
 # quickwebapi
 目的：使用Lambada方式，完成对WebApi的开发和调用。
+
 缘由：为了解耦服务和展现，将越来越多的使用WebApi提供各种服务；随着服务的细化，WebApi的接口将越来越多，成百上千。如何方便的管理和调用规模庞大的WebApi接口成了开发者头疼的问题。
+
 设计：通过自定义的QuickWebApiAttribute来对业务接口进行规范和说明，并生成配置文件；可以通过修改配置文件，达成对WebApi的地址的调整而不用修改代码。
+
 用途：除了重新搭建的系统可以使用外，对于一些其它语言（如java等）提供的webapi，只需要定义出相应的业务接口，便可以使用
 
 ===================================================================================================================
 举例说明：
 ********************服务端：WebApi业务接口的声明和实现**************************
+
     //数据模型
     public class customer
     {
@@ -75,6 +79,7 @@
     }
     
 ********************调用端：WebApi业务接口的配置生成和加载**************************
+
     webapifactory.Instance.Build_Apis();
     webapifactory.Instance.Load_Apis();
 
@@ -125,6 +130,7 @@
 
     
 ********************调用端：WebApi业务接口的调用**************************
+
     public class HomeController : Controller
     {
         public object customers()
@@ -166,7 +172,9 @@
     }
     
 ********************其它说明**************************
+
     invoke方法的返回结果的数据结构如下：
+    
     public class result<T> where T : class, new()
     {
         //如果通讯不正常，则为返回的HTTP状态吗；否则为服务端返回的状态吗，默认值为0（正常）
@@ -181,6 +189,7 @@
         public DateTime time { get; set; }
      }
      如果页面上通过ajax直接调用WebApi接口，则需要在服务端注册JsonFormatter，则ajax可以直接得到result的json格式：
+     
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services

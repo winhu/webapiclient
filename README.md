@@ -9,6 +9,7 @@
 
 ===================================================================================================================
 举例说明：
+
 ********************服务端：WebApi业务接口的声明和实现**************************
 
     //数据模型
@@ -21,7 +22,7 @@
         public DateTime birthday { get; set; }
         public bool state { get; set; }
     }
-    //业务动态库声明
+    //业务接口动态库声明
     [assembly: QuickWebApiDll("customer", "http://localhost:11520")]
     //业务接口声明
     [QuickWebApi("customer", "api/customer_service", "用户管理")]
@@ -80,10 +81,11 @@
     
 ********************调用端：WebApi业务接口的配置生成和加载**************************
 
+    //在服务启动时调用，一般在global中
     webapifactory.Instance.Build_Apis();
     webapifactory.Instance.Load_Apis();
 
-    配置文件格式如下（每个业务接口生成一个独立的配置文件，便于维护）：
+    //配置文件格式(*.xml)如下（每个业务接口生成一个独立的配置文件，便于维护）：
     <?xml version="1.0" encoding="utf-16"?>
     <ArrayOfWebApiNode xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
       <WebApiNode>
@@ -120,7 +122,7 @@
       </WebApiNode>
     </ArrayOfWebApiNode>
 
-    并同时生产简单的业务接口描述文件：
+    //并同时生产简单的业务接口描述文件(*.txt)：
     001,用户管理:QuickWebApi.Sample.Apis-1.0.0.0-
     001,http://localhost:11520/api/customer_service/list,用户列表,列举用户信息
     002,http://localhost:11520/api/customer_service/info,,
@@ -173,8 +175,7 @@
     
 ********************其它说明**************************
 
-    invoke方法的返回结果的数据结构如下：
-    
+    //invoke方法的返回结果的数据结构如下：
     public class result<T> where T : class, new()
     {
         //如果通讯不正常，则为返回的HTTP状态吗；否则为服务端返回的状态吗，默认值为0（正常）
@@ -188,8 +189,7 @@
         //服务器端时间
         public DateTime time { get; set; }
      }
-     如果页面上通过ajax直接调用WebApi接口，则需要在服务端注册JsonFormatter，则ajax可以直接得到result的json格式：
-     
+     //如果页面上通过ajax直接调用WebApi接口，则需要在服务端注册JsonFormatter，则ajax可以直接得到result的json格式：
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -207,4 +207,5 @@
         }
 
 ===================================================================================================================
-感谢您的阅读
+感谢您的阅读。
+目前QuickWebApi还有一些其它想法和设计会未加入其中，后续会继续修缮。且还存在一些未解决的问题，欢迎您能贡献您的智慧和意见。

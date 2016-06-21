@@ -12,6 +12,8 @@ namespace QuickWebApi.Sample.Service
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            //webapifactory.Instance.Build_Apis();
+            //webapifactory.Instance.Load_Apis();
         }
     }
 }

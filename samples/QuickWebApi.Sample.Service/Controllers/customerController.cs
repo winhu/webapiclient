@@ -65,7 +65,7 @@ namespace QuickWebApi.Sample.Service.Controllers
         [HttpGet]
         public IHttpActionResult all(long timestamp)
         {
-            new webapi<icompany>().invoke(i => i.all, timestamp);
+            //new webapi<icompany>().invoke(i => i.all, timestamp);
             return Ok(new result(DB.customers.Where(c => c.timestamp < timestamp)));
         }
 

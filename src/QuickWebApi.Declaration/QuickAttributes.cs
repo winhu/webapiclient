@@ -28,21 +28,24 @@ namespace QuickWebApi
     public class QuickWebApiAttribute : Attribute
     {
         public QuickWebApiAttribute(string service, string route, string name = null, string comment = null)
-            : this(service, route, MethodType.NONE, name, comment)
+            : this(service, route, MethodType.NONE, name, comment, null)
         { }
-        public QuickWebApiAttribute(MethodType methodtype, string name = null, string comment = null)
-            : this(null, null, methodtype, name, comment)
+        public QuickWebApiAttribute(MethodType methodtype, string name = null, string comment = null, Type result_type = null)
+            : this(null, null, methodtype, name, comment, result_type)
         { }
-        public QuickWebApiAttribute(string service, string route, MethodType methodtype = MethodType.NONE, string name = null, string comment = null)
+        public QuickWebApiAttribute(string service, string route, MethodType methodtype = MethodType.NONE, string name = null, string comment = null, Type result_type = null)
         {
             _service = service;
             _name = name;
             _comment = comment;
             _methodtype = methodtype;
             _route = route;
+            _result_type = result_type;
         }
         string _service, _name, _comment, _route;
         MethodType _methodtype;
+        Type _result_type;
+        public Type resultype { get { return _result_type; } }
         public string service { get { return _service; } }
         public MethodType methodtype { get { return _methodtype; } }
         public string name { get { return _name; } }

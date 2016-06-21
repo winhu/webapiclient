@@ -26,18 +26,18 @@ namespace QuickWebApi.Sample.Web.Controllers
             }
             return Json(custs, JsonRequestBehavior.AllowGet);
         }
-        public object all()
-        {
-            int a = 1;
-            //var b = new webapi<icompany>().invoke(i => i.all, a);
-            var ret = new webapi<icustomer>().invoke(i => i.all, DateTime.Now.Ticks);
-            return ret;
-        }
-        public object pick()
-        {
-            var ret = new webapi<icustomer>().invoke(i => i.pick, DateTime.Now.Ticks);
-            return ret;
-        }
+        //public object all()
+        //{
+        //    int a = 1;
+        //    //var b = new webapi<icompany>().invoke(i => i.all, a);
+        //    var ret = new webapi<icustomer>().invoke(i => i.all, DateTime.Now.Ticks);
+        //    return ret;
+        //}
+        //public object pick()
+        //{
+        //    var ret = new webapi<icustomer>().invoke(i => i.pick, DateTime.Now.Ticks);
+        //    return ret;
+        //}
         public object info()
         {
             var ret = new webapi<icustomer>().invoke(i => i.info, 4);
@@ -60,10 +60,10 @@ namespace QuickWebApi.Sample.Web.Controllers
             var ret = new webapi<icustomer>().invoke(i => i.del, 4);
             return ret;
         }
-        public object deleteage()
-        {
-            var ret = new webapi<icustomer>().invoke(i => i.delage, 33);
-            return ret;
-        }
+        //public object deleteage()
+        //{
+        //    var ret = new webapi<icustomer>().invoke(i => i.delage, 33);
+        //    return ret;
+        //}
     }
 }

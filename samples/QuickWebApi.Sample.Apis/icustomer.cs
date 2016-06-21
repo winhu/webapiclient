@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,34 +8,34 @@ using System.Web.Http;
 
 namespace QuickWebApi.Sample.Apis
 {
+    [Description("用户信息")]
     public class customer
     {
+        [Description("id")]
         public int id { get; set; }
+        [Description("时间戳")]
         public long timestamp { get; set; }
+        [Description("姓名")]
         public string name { get; set; }
+        [Description("性别")]
         public int age { get; set; }
+        [Description("生日")]
         public DateTime birthday { get; set; }
+        [Description("状态")]
         public bool state { get; set; }
     }
 
     [QuickWebApi("customer", "api/customer_service", "用户管理")]
     public interface icustomer
     {
-        [QuickWebApi(MethodType.HTTPGET, "用户列表", "列举用户信息")]
+        [QuickWebApi(MethodType.HTTPGET, "用户列表", "列举所有用户", typeof(customer[]))]
         IHttpActionResult list();
-        [QuickWebApi(MethodType.HTTPGET)]
+        [QuickWebApi(MethodType.HTTPGET, "用户信息", "获取指定用户信息", typeof(customer))]
         IHttpActionResult info(int customerid);
-        [QuickWebApi(MethodType.HTTPGET)]
-        IHttpActionResult all(long timestamp);
-        [QuickWebApi(MethodType.HTTPGET)]
-        IHttpActionResult pick(long timestamp);
-
-        [QuickWebApi(MethodType.HTTPPOST)]
+        [QuickWebApi(MethodType.HTTPGET, "更新用户", "更新用户信息")]
         IHttpActionResult update(int id, string name);
-        [QuickWebApi(MethodType.HTTPDEL)]
+        [QuickWebApi(MethodType.HTTPGET, "", "删除用户")]
         IHttpActionResult del(int id);
-        [QuickWebApi(MethodType.HTTPDEL)]
-        IHttpActionResult delage(int age);
         [QuickWebApi(MethodType.HTTPPUT)]
         IHttpActionResult save(customer customer);
     }

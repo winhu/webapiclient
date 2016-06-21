@@ -1,15 +1,48 @@
-001,用户管理:QuickWebApi.Sample.Apis-1.0.0.0-
-001,http://localhost:11520/api/icompany_service/info,,
-002,http://localhost:11520/api/icompany_service/all,,
-003,http://localhost:11520/api/icompany_service/remove,,
+001,用户管理
+    类型：QuickWebApi.Sample.Apis
+    版本：1.0.0.0
+    描述：
+        名称：用户列表
+        说明：列举所有用户
+        地址：http://localhost:11520/api/customer_service/list,
+        方式：HTTPGET
+        输出：customer[]
 
-002,用户管理:QuickWebApi.Sample.Apis-1.0.0.0-
-001,http://localhost:11520/api/customer_service/list,用户列表,列举用户信息
-002,http://localhost:11520/api/customer_service/info,,
-003,http://localhost:11520/api/customer_service/all,,
-004,http://localhost:11520/api/customer_service/pick,,
-005,http://localhost:11520/api/customer_service/update,,
-006,http://localhost:11520/api/customer_service/del,,
-007,http://localhost:11520/api/customer_service/delage,,
-008,http://localhost:11520/api/customer_service/save,,
+        名称：用户信息
+        说明：获取指定用户信息
+        地址：http://localhost:11520/api/customer_service/info,
+        方式：HTTPGET
+        输出：customer
+        参数：customerid, Int32, 
 
+        名称：更新用户
+        说明：更新用户信息
+        地址：http://localhost:11520/api/customer_service/update,
+        方式：HTTPGET
+        参数：id, Int32, 
+        参数：name, String, 
+
+        名称：del
+        说明：删除用户
+        地址：http://localhost:11520/api/customer_service/del,
+        方式：HTTPGET
+        参数：id, Int32, 
+
+        名称：save
+        说明：
+        地址：http://localhost:11520/api/customer_service/save,
+        方式：HTTPPUT
+        参数：customer, customer, 用户信息
+
+------------------------------------------------------------------------------------------------
+
+类型：customer, 用户信息
+    属性：id, Int32, id
+    属性：timestamp, Int64, 时间戳
+    属性：name, String, 姓名
+    属性：age, Int32, 性别
+    属性：birthday, DateTime, 生日
+    属性：state, Boolean, 状态
+
+
+------------------------------------------------------------------------------------------------

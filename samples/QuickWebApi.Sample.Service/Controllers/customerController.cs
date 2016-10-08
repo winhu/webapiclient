@@ -24,6 +24,7 @@ namespace QuickWebApi.Sample.Service.Controllers
 
 
     [Route("api/customer_service/{action}/")]
+    [Authorize]
     public class customerController : ApiController, icustomer
     {
         [HttpGet]

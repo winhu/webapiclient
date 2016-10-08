@@ -4,33 +4,33 @@
     描述：
         名称：用户列表
         说明：列举所有用户
-        地址：http://localhost:11520/api/customer_service/list,
+        地址：http://passport.synjones.com:11520/api/customer_service/list,
         方式：HTTPGET
         输出：customer[]
 
         名称：用户信息
         说明：获取指定用户信息
-        地址：http://localhost:11520/api/customer_service/info,
+        地址：http://passport.synjones.com:11520/api/customer_service/info,
         方式：HTTPGET
         输出：customer
         参数：customerid, Int32, 
 
         名称：更新用户
         说明：更新用户信息
-        地址：http://localhost:11520/api/customer_service/update,
+        地址：http://passport.synjones.com:11520/api/customer_service/update,
         方式：HTTPGET
         参数：id, Int32, 
         参数：name, String, 
 
         名称：del
         说明：删除用户
-        地址：http://localhost:11520/api/customer_service/del,
+        地址：http://passport.synjones.com:11520/api/customer_service/del,
         方式：HTTPGET
         参数：id, Int32, 
 
         名称：save
         说明：
-        地址：http://localhost:11520/api/customer_service/save,
+        地址：http://passport.synjones.com:11520/api/customer_service/save,
         方式：HTTPPUT
         参数：customer, customer, 用户信息
 

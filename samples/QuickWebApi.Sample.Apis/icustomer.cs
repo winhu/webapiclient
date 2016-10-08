@@ -25,18 +25,18 @@ namespace QuickWebApi.Sample.Apis
         public bool state { get; set; }
     }
 
-    [QuickWebApi("customer", "api/customer_service", "用户管理")]
+    [WebApi("customer", "api/customer_service", "用户管理")]
     public interface icustomer
     {
-        [QuickWebApi(MethodType.HTTPGET, "用户列表", "列举所有用户", typeof(customer[]))]
+        [WebApi(MethodType.HTTPGET, "用户列表", "列举所有用户", typeof(customer[]))]
         IHttpActionResult list();
-        [QuickWebApi(MethodType.HTTPGET, "用户信息", "获取指定用户信息", typeof(customer))]
+        [WebApi(MethodType.HTTPGET, "用户信息", "获取指定用户信息", typeof(customer))]
         IHttpActionResult info(int customerid);
-        [QuickWebApi(MethodType.HTTPGET, "更新用户", "更新用户信息")]
+        [WebApi(MethodType.HTTPGET, "更新用户", "更新用户信息")]
         IHttpActionResult update(int id, string name);
-        [QuickWebApi(MethodType.HTTPGET, "", "删除用户")]
+        [WebApi(MethodType.HTTPGET, "", "删除用户")]
         IHttpActionResult del(int id);
-        [QuickWebApi(MethodType.HTTPPUT)]
+        [WebApi(MethodType.HTTPPUT)]
         IHttpActionResult save(customer customer);
     }
 

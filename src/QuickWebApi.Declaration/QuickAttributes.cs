@@ -15,9 +15,9 @@ namespace QuickWebApi
         HTTPDEL = 8
     }
     [AttributeUsage(AttributeTargets.Assembly)]
-    public class QuickWebApiDllAttribute : Attribute
+    public class WebApiDllAttribute : Attribute
     {
-        public QuickWebApiDllAttribute(string name, string domain) { _name = name; _domain = domain; }
+        public WebApiDllAttribute(string name, string domain) { _name = name; _domain = domain; }
         string _name = "default", _domain = "http://localhost";
 
         public string Name { get { return _name; } }
@@ -25,15 +25,15 @@ namespace QuickWebApi
     }
 
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method)]
-    public class QuickWebApiAttribute : Attribute
+    public class WebApiAttribute : Attribute
     {
-        public QuickWebApiAttribute(string service, string route, string name = null, string comment = null)
+        public WebApiAttribute(string service, string route, string name = null, string comment = null)
             : this(service, route, MethodType.NONE, name, comment, null)
         { }
-        public QuickWebApiAttribute(MethodType methodtype, string name = null, string comment = null, Type result_type = null)
+        public WebApiAttribute(MethodType methodtype, string name = null, string comment = null, Type result_type = null)
             : this(null, null, methodtype, name, comment, result_type)
         { }
-        public QuickWebApiAttribute(string service, string route, MethodType methodtype = MethodType.NONE, string name = null, string comment = null, Type result_type = null)
+        public WebApiAttribute(string service, string route, MethodType methodtype = MethodType.NONE, string name = null, string comment = null, Type result_type = null)
         {
             _service = service;
             _name = name;

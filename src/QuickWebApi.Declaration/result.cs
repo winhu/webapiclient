@@ -18,6 +18,10 @@ namespace QuickWebApi
         /// </summary>
         public result() : this(0, null, -9999, null) { }
         /// <summary>
+        /// commonly used result（errcode=0）
+        /// </summary>
+        public result(bool ret) : this(ret ? 0 : -9999, null, -9999, null) { }
+        /// <summary>
         /// commonly used result（errcode=-1 when data=null）
         /// </summary>
         public result(T data) : this(data == null ? -1 : 0, null, -9999, data) { }
@@ -104,13 +108,17 @@ namespace QuickWebApi
         /// </summary>
         public result() : this(0, null, -9999, null) { }
         /// <summary>
+        /// commonly used result（errcode=0）
+        /// </summary>
+        public result(bool ret) : this(ret ? 0 : -9999, null, -9999, null) { }
+        /// <summary>
         /// commonly used result（errcode=-1 when data=null）
         /// </summary>
         public result(object data) : this(data == null ? -1 : 0, null, -9999, data) { }
         /// <summary>
         /// commonly used result（errcode=0 when errmsg is null or empty）
         /// </summary>
-        public result(string errmsg) : this(string.IsNullOrWhiteSpace(errmsg) ? 0 : -1, errmsg, -9999, null) { }
+        public result(string errmsg) : this(string.IsNullOrWhiteSpace(errmsg) ? 0 : -9999, errmsg, -9999, null) { }
         /// <summary>
         /// commonly used result
         /// </summary>

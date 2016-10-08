@@ -13,7 +13,7 @@ namespace QuickWebApi.Sample.Web.Controllers
 
         public object customers()
         {
-            var ret = new webapi<icustomer>().invoke(i => i.list);
+            result ret = new webapi<icustomer>().invoke(i => i.list);
             return ret;
         }
         public JsonResult customer_list()

@@ -120,10 +120,10 @@ namespace QuickWebApi
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
             jsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
         }
-        //public void Register_AuthenticationHandler(HttpConfiguration config)
-        //{
-        //    config.MessageHandlers.Add(new AuthenticationHandler());
-        //}
+        public void Register_AuthenticationHandler(HttpConfiguration config)
+        {
+            config.MessageHandlers.Add(new AuthenticationHandler());
+        }
 
 
         public string Load_Apis()
@@ -164,22 +164,22 @@ namespace QuickWebApi
 
         public void Build_Apis()
         {
-            foreach (var ass in AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(QuickWebApiDllAttribute), true).Length > 0))
+            foreach (var ass in AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(WebApiDllAttribute), true).Length > 0))
             {
                 var vatt = ass.GetCustomAttribute<AssemblyFileVersionAttribute>();
                 var tatt = ass.GetCustomAttribute<AssemblyTitleAttribute>();
-                var datt = ass.GetCustomAttribute<QuickWebApiDllAttribute>();
+                var datt = ass.GetCustomAttribute<WebApiDllAttribute>();
                 apis.Clear();
                 var input_types = new List<Type>();
                 foreach (var type in ass.GetTypes())
                 {
-                    var attr = type.GetCustomAttribute<QuickWebApiAttribute>();
+                    var attr = type.GetCustomAttribute<WebApiAttribute>();
                     if (attr != null)
                     {
                         WebApiNode api = new WebApiNode(datt.Domain) { Name = attr.name, Service = attr.service, Route = attr.route, Comment = attr.comment, Version = vatt.Version, Title = tatt.Title };
                         foreach (var mi in type.GetMethods())
                         {
-                            var att = mi.GetCustomAttribute<QuickWebApiAttribute>();
+                            var att = mi.GetCustomAttribute<WebApiAttribute>();
                             if (att != null)
                             {
                                 var act = new WebApiMethod() { Action = mi.Name, Code = att.service, Method = att.methodtype, Name = string.IsNullOrWhiteSpace(att.name) ? mi.Name : att.name, Comment = att.comment, OutputType = att.resultype };
@@ -233,18 +233,13 @@ namespace QuickWebApi
             if (apis == null || apis.Count == 0) return;
 
             StringBuilder sb = new StringBuilder();
-            int counter = 0;
             int counter2 = 1;
             foreach (var api in apis)
             {
-                counter = 1;
                 sb.AppendLine(string.Format("{0},{1}", counter2++.ToString("d3"), api.Name));
                 sb.AppendLine(string.Format("    类型：{0}", api.Title));
                 sb.AppendLine(string.Format("    版本：{0}", api.Version));
                 sb.AppendLine(string.Format("    描述：{0}", api.Comment));
-
-
-                //sb.AppendLine(string.Format("{0},{1}:{2}-{3}-{4}", counter2++.ToString("d3"), api.Name, api.Title, api.Version, api.Comment));
                 foreach (var act in api.Methods)
                 {
                     sb.AppendLine(string.Format("        名称：{0}", act.Name));
@@ -257,11 +252,6 @@ namespace QuickWebApi
                     {
                         sb.AppendLine(string.Format("        参数：{0}, {1}, {2}", p.Name, p.TypeName, p.Desc));
                     }
-                    //sb.AppendLine(string.Format("            参数{0}个：{1}", act.Params.Count, act.ParamsDesc()));
-
-                    //sb.AppendLine(string.Format("    {0},{1}/{2}/{3},{4},{5}", counter++.ToString("d3"), api.Uri, api.Route, act.Action, act.Name, act.Comment));
-                    //sb.AppendLine(string.Format("        参数{0}个：{1}", act.Params.Count, act.ParamsDesc()));
-
                     sb.AppendLine();
                 }
                 sb.AppendLine("------------------------------------------------------------------------------------------------");
@@ -290,7 +280,6 @@ namespace QuickWebApi
 
             }
 
-            //if (!System.IO.File.Exists(string.Format("{0}/apis_{1}.txt", Check_Dir(), name)))
             System.IO.File.WriteAllText(string.Format("{0}/apis_{1}.txt", Check_Dir(), name), sb.ToString());
         }
 

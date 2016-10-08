@@ -33,8 +33,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Security">
-      <HintPath>..\..\..\..\synjones\code\svn\ref\thirdparty\comext\Common.Security.dll</HintPath>
+    <Reference Include="Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libs\net45\Common.Security.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

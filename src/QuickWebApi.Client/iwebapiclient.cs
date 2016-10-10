@@ -10,21 +10,24 @@ namespace QuickWebApi
         //void Excute(EventHandler eh, string data);
         //result Excute(string requestUri, string data);
         result Excute(string requestUri, object req);
-        result<tresp> Excute<tresp>(string requestUri, object req) where tresp : class,new();
+        result<tresp> Excute<tresp>(string requestUri, object req);// where tresp : class,new();
     }
 
     public interface iwebapiclient : IDisposable
     {
-        result Get(string requestUri, object req);
-        result<tresp> Get<tresp>(string requestUri, object req) where tresp : class,new();
+        //result<tresp> Get<tresp>(string requestUri);// where tresp : class,new();
+        //result<tresp> Get<tresp>(string requestUri, object req = null);// where tresp : class,new();
+
+        result Get(string requestUri, object req = null);
+        result<tresp> Get<tresp>(string requestUri, object req = null);// where tresp : class,new();
 
         result Post(string requestUri, object req);
-        result<tresp> Post<tresp>(string requestUri, object req) where tresp : class,new();
+        result<tresp> Post<tresp>(string requestUri, object req);// where tresp : class,new();
 
         result Put(string requestUri, object req);
-        result<tresp> Put<tresp>(string requestUri, object req) where tresp : class,new();
+        result<tresp> Put<tresp>(string requestUri, object req);// where tresp : class,new();
 
         result Delete(string requestUri, object req);
-        result<tresp> Delete<tresp>(string requestUri, object req) where tresp : class,new();
+        result<tresp> Delete<tresp>(string requestUri, object req);// where tresp : class,new();
     }
 }

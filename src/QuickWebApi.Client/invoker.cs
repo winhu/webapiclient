@@ -45,6 +45,21 @@ namespace QuickWebApi
         //    return new result(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri, requestUri));
         //}
 
+        public result Excute(string requestUri)
+        {
+            var api = webapifactory.Instance.Get(_service);
+            if (api == null) return new result(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
+            using (iwebapiclient client = new webapiclient(api.Uri))
+            {
+                var mtd = api.Method(requestUri);
+                switch (mtd.Method)
+                {
+                    case MethodType.HTTPGET:
+                        return client.Get(api.Url(requestUri));
+                }
+            }
+            return new result(-1, string.Format("未找到{0}->{1}.{2}的webapi配置", _service, requestUri, requestUri));
+        }
         public result Excute(string requestUri, object req)
         {
             var api = webapifactory.Instance.Get(_service);
@@ -67,7 +82,8 @@ namespace QuickWebApi
             return new result(-1, string.Format("未找到{0}->{1}.{2}的webapi配置", _service, requestUri, requestUri));
         }
 
-        public result<tresp> Excute<tresp>(string requestUri, object req) where tresp : class,new()
+        public result<tresp> Excute<tresp>(string requestUri, object req)
+        //where tresp : class,new()
         {
             var api = webapifactory.Instance.Get(_service);
             if (api == null) return new result<tresp>(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));

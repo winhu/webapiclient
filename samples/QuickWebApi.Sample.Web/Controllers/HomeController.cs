@@ -13,57 +13,48 @@ namespace QuickWebApi.Sample.Web.Controllers
 
         public object customers()
         {
-            result ret = new webapi<icustomer>().invoke(i => i.list);
+            var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.list);
+            return ret;
+        }
+        public object query(int id = 2, string name = "name3")
+        {
+            var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.query, id, name);
             return ret;
         }
         public JsonResult customer_list()
         {
-            var ret = new webapi<icustomer, List<customer>>().invoke(i => i.list);
-            List<object> custs = new List<object>();
-            foreach (var cust in ret.data)
+            var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.list);
+            if (ret.OK() && ret.HasData())
             {
-                custs.Add(new { id = cust.id, name = cust.name, age = cust.age });
+                List<object> custs = new List<object>();
+                foreach (var cust in ret.data.list)
+                {
+                    custs.Add(new { id = cust.id, name = cust.name, age = cust.age });
+                }
+                return Json(custs, JsonRequestBehavior.AllowGet);
             }
-            return Json(custs, JsonRequestBehavior.AllowGet);
+            return Json(ret, JsonRequestBehavior.AllowGet);
         }
-        //public object all()
-        //{
-        //    int a = 1;
-        //    //var b = new webapi<icompany>().invoke(i => i.all, a);
-        //    var ret = new webapi<icustomer>().invoke(i => i.all, DateTime.Now.Ticks);
-        //    return ret;
-        //}
-        //public object pick()
-        //{
-        //    var ret = new webapi<icustomer>().invoke(i => i.pick, DateTime.Now.Ticks);
-        //    return ret;
-        //}
         public object info()
         {
-            var ret = new webapi<icustomer>().invoke(i => i.info, 4);
+            var ret = HttpContext.ApiInvoke<icustomer, int, customer>(i => i.info, 4);
             return ret;
         }
         public object update()
         {
-            var cust = new customer() { id = 3, name = "new name", age = 22, timestamp = DateTime.Now.Ticks, birthday = DateTime.Now.AddYears(-10) };
-            var ret = new webapi<icustomer>().invoke(i => i.update, 3, "new name");
+            var ret = HttpContext.ApiInvoke<icustomer, request_update, com_result>(i => i.update, new request_update() { id = 3, name = "new name" });
             return ret;
         }
         public object save()
         {
             var cust = new customer() { id = 3, name = "new name", age = 22, timestamp = DateTime.Now.Ticks, birthday = DateTime.Now.AddYears(-10) };
-            var ret = new webapi<icustomer>().invoke(i => i.save, cust);
+            var ret = HttpContext.ApiInvoke<icustomer, customer, com_result>(i => i.save, cust);
             return ret;
         }
         public object delete()
         {
-            var ret = new webapi<icustomer>().invoke(i => i.del, 4);
+            var ret = HttpContext.ApiInvoke<icustomer, int, com_result>(i => i.del, 4);
             return ret;
         }
-        //public object deleteage()
-        //{
-        //    var ret = new webapi<icustomer>().invoke(i => i.delage, 33);
-        //    return ret;
-        //}
     }
 }

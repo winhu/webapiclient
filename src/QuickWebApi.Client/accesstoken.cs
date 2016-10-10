@@ -17,7 +17,7 @@ namespace QuickWebApi
         public WebApiAccessToken(string syscode, string appkey, string targetcode)
         {
             this.LocalCode = syscode;
-            this.AppKey = appkey;
+            this.Secret = appkey;
             this.TargetCode = targetcode;
             Expires = DateTime.Now;
             //TAccessToken = taccesstoken;
@@ -28,7 +28,7 @@ namespace QuickWebApi
         public KeyValuePair<string, string>[] Authentication { get; set; }
         public string LocalCode { get; set; }
         public string TargetCode { get; set; }
-        public string AppKey { get; set; }
+        public string Secret { get; set; }
         public DateTime Expires { get; set; }
         //public T TAccessToken { get; set; }
 
@@ -42,13 +42,14 @@ namespace QuickWebApi
         {
             if (Expires >= DateTime.Now)
             {
-                string nonce = Guid.NewGuid().ToString("N");
-                long timespan = DateTime.Now.Ticks;
-                var param = new string[] { nonce, timespan.ToString(), LocalCode, AppKey };
-                Array.Sort(param);
-                var _sign = String.Join(null, param);
-                string data = string.Format("nonce={0}&timespan={1}&signature={2}", nonce, timespan, _sign);
-                var ret = new webapi<T, AccessToken>(prefix).invoke(i => i.get, _sign, nonce, timespan);
+                var tr = new TokenRequest(Secret);
+                //string nonce = Guid.NewGuid().ToString("N");
+                //long timespan = DateTime.Now.Ticks;
+                //var param = new string[] { nonce, timespan.ToString(), LocalCode, Secret };
+                //Array.Sort(param);
+                //var _sign = String.Join(null, param);
+                //string data = string.Format("nonce={0}&timespan={1}&signature={2}", nonce, timespan, _sign);
+                var ret = new webapi<T, AccessToken>(prefix).invoke(i => i.get, tr);
                 if (ret.OK())
                 {
                     Token = ret.data;

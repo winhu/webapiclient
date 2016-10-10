@@ -81,9 +81,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="auth.cs" />
     <Compile Include="accesstoken.cs" />
     <Compile Include="api.cs" />
+    <Compile Include="auth.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="delegates.cs" />
     <Compile Include="HttpContextHelper.cs" />
     <Compile Include="webapi.cs" />

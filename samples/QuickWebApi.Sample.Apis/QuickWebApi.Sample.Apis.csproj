@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="api_models.cs" />
     <Compile Include="icompany.cs" />
     <Compile Include="icustomer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

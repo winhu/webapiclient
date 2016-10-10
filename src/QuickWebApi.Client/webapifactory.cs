@@ -153,16 +153,16 @@ namespace QuickWebApi
                 return stream.ToString();
             }
         }
-        T Deserialize<T>(string data) where T : class,new()
+        T Deserialize<T>(string data) //where T : class,new()
         {
             using (StringReader stream = new StringReader(data))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
-                return serializer.Deserialize(stream) as T;
+                return (T)serializer.Deserialize(stream);
             }
         }
 
-        public void Build_Apis()
+        public void Build_Apis(bool overwrite = true)
         {
             foreach (var ass in AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetCustomAttributes(typeof(WebApiDllAttribute), true).Length > 0))
             {
@@ -208,18 +208,19 @@ namespace QuickWebApi
                             apis.Add(api);
                     }
                 }
-                Build_Apids_Config(apis, datt.Name);
+                Build_Apids_Config(apis, datt.Name, overwrite);
                 Build_Apids_Doc(apis, datt.Name, input_types);
             }
         }
 
-        void Build_Apids_Config(List<WebApiNode> apis, string name)
+        void Build_Apids_Config(List<WebApiNode> apis, string name, bool overwrite = true)
         {
             if (apis == null || apis.Count == 0) return;
             //var jss = new JavaScriptSerializer().Serialize(apis);
             var jss = Serializer<List<WebApiNode>>(apis);// JsonConvert.SerializeObject(apis);
-            if (!System.IO.File.Exists(string.Format("{0}/apis_{1}.xml", Check_Dir(), name)))
-                System.IO.File.WriteAllText(string.Format("{0}/apis_{1}.xml", Check_Dir(), name), jss);
+            if (!overwrite && System.IO.File.Exists(string.Format("{0}/apis_{1}.xml", Check_Dir(), name)))
+                return;
+            System.IO.File.WriteAllText(string.Format("{0}/apis_{1}.xml", Check_Dir(), name), jss);
         }
         string Check_Dir()
         {
@@ -228,7 +229,7 @@ namespace QuickWebApi
                 System.IO.Directory.CreateDirectory(dir);
             return dir;
         }
-        void Build_Apids_Doc(List<WebApiNode> apis, string name, List<Type> types = null)
+        void Build_Apids_Doc(List<WebApiNode> apis, string name, List<Type> types = null, bool overwrite = true)
         {
             if (apis == null || apis.Count == 0) return;
 
@@ -279,7 +280,8 @@ namespace QuickWebApi
                 sb.AppendLine("------------------------------------------------------------------------------------------------");
 
             }
-
+            if (!overwrite && System.IO.File.Exists(string.Format("{0}/apis_{1}.txt", Check_Dir(), name)))
+                return;
             System.IO.File.WriteAllText(string.Format("{0}/apis_{1}.txt", Check_Dir(), name), sb.ToString());
         }
 

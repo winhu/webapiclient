@@ -12,9 +12,9 @@ namespace QuickWebApi.Sample.Service
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            GlobalConfiguration.Configuration.MessageHandlers.Add(new AuthenticationHandler());  
+            //GlobalConfiguration.Configuration.MessageHandlers.Add(new AuthenticationHandler());  
             //webapifactory.Instance.Register_AuthenticationHandler(GlobalConfiguration.Configuration);
-            //webapifactory.Instance.Build_Apis();
+            webapifactory.Instance.Build_Apis();
             //webapifactory.Instance.Load_Apis();
         }
     }

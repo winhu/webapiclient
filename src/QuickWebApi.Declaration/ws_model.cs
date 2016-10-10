@@ -9,8 +9,8 @@ using System.Web;
 namespace QuickWebApi
 {
     public class ws_model<Trequest, Tresponse>
-        where Trequest : class ,new()
-        where Tresponse : class,new()
+    //where Trequest : class ,new()
+    //where Tresponse : class,new()
     {
         public ws_model()
         {
@@ -32,18 +32,18 @@ namespace QuickWebApi
         {
             get
             {
-                sign();
+                Sign();
                 return _signature;
             }
             set { _signature_set = value; }
         }
         private string _signature_set = null;
         private string _signature = null;
-        bool valid_sign()
+        bool ValidSignature()
         {
             return _signature_set == signature;
         }
-        void sign()
+        void Sign()
         {
             var sreq = request == null ? "" : JsonConvert.SerializeObject(request);
             var sresp = response == null ? "" : JsonConvert.SerializeObject(response);
@@ -54,10 +54,16 @@ namespace QuickWebApi
             Array.Sort(sf);
             _signature = string.Join("", sf).ToSHA1();
         }
+
+        public bool Responsed()
+        {
+            if (response.GetType().IsValueType) return true;
+            return response != null;
+        }
     }
 
     public class ws_model<Trequest> : ws_model<Trequest, object>
-        where Trequest : class ,new()
+    //where Trequest : class ,new()
     {
         public ws_model()
         {
@@ -66,6 +72,15 @@ namespace QuickWebApi
         public ws_model(Trequest request)
         {
             this.request = request;
+            this.secret = new Secret();
+        }
+    }
+
+    public class ws_model : ws_model<object, object>
+    {
+        public ws_model()
+        {
+            this.request = null;
             this.secret = new Secret();
         }
     }

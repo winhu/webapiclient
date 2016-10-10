@@ -11,16 +11,21 @@ namespace QuickWebApi
     /// commonly used result,
     /// successful when errcode=0
     /// </summary>
-    public class result<T> where T : class, new()
+    public class result<T>
+    //where T : class, new()
     {
         /// <summary>
         /// commonly used result（errcode=0）
         /// </summary>
-        public result() : this(0, null, -9999, null) { }
+        public result() : this(0, null, -9999) { }
         /// <summary>
         /// commonly used result（errcode=0）
         /// </summary>
-        public result(bool ret) : this(ret ? 0 : -9999, null, -9999, null) { }
+        public result(bool ret) : this(ret ? 0 : -9999, null, -9999) { }
+        /// <summary>
+        /// commonly used result
+        /// </summary>
+        public result(bool ret, string err = null) : this(ret ? 0 : -9999, err, -9999) { }
         /// <summary>
         /// commonly used result（errcode=-1 when data=null）
         /// </summary>
@@ -28,25 +33,38 @@ namespace QuickWebApi
         /// <summary>
         /// commonly used result（errcode=0 when errmsg is null or empty）
         /// </summary>
-        public result(string errmsg) : this(string.IsNullOrWhiteSpace(errmsg) ? 0 : -1, errmsg, -9999, null) { }
+        public result(string errmsg) : this(string.IsNullOrWhiteSpace(errmsg) ? 0 : -1, errmsg, -9999) { }
         /// <summary>
         /// commonly used result
         /// </summary>
         /// <param name="errcode">successful when errcode=0</param>
         /// <param name="errmsg">err msg</param>
-        public result(int errcode, string errmsg = null) : this(errcode, errmsg, -9999, null) { }
+        public result(int errcode, string errmsg = null) : this(errcode, errmsg, -9999) { }
         /// <summary>
         /// commonly used result
         /// </summary>
         /// <param name="errcode">successful when errcode=0</param>
         /// <param name="id">if you need, default value is 0</param>
-        public result(int errcode, long id) : this(errcode, null, id, null) { }
+        public result(int errcode, long id) : this(errcode, null, id) { }
         /// <summary>
         /// commonly used result
         /// </summary>
         /// <param name="errcode">successful when errcode=0</param>
         /// <param name="data">if you need, default value is null</param>
         public result(int errcode, T data) : this(errcode, null, -9999, data) { }
+        /// <summary>
+        /// commonly used result
+        /// </summary>
+        /// <param name="errcode">commonly used result</param>
+        /// <param name="errmsg">err msg</param>
+        /// <param name="id">if you need</param>
+        public result(int errcode, string errmsg, long id)
+        {
+            this.errcode = errcode;
+            this.errmsg = errmsg;
+            this.id = id;
+            time = DateTime.Now;
+        }
         /// <summary>
         /// commonly used result
         /// </summary>
@@ -88,6 +106,9 @@ namespace QuickWebApi
         /// </summary>
         /// <returns></returns>
         public bool OK() { return errcode == 0; }
+        public bool ERR() { return errcode != 0; }
+
+        public bool HasData() { return data != null; }
 
         public override string ToString()
         {

@@ -74,4 +74,85 @@ namespace QuickWebApi
             set { _time = value; }
         }
     }
+
+    public class TokenRequest
+    {
+        public TokenRequest(string secret)
+        {
+            _secret = secret;
+        }
+        public TokenRequest Set(string ip, string realm)
+        {
+            Ip = ip;
+            Realm = realm;
+            return this;
+        }
+
+        string _nonce, _crypt, _signature, _secret;
+        long _timestamp = DateTime.Now.Ticks;
+        public string Ip { get; set; }
+        public string Realm { get; set; }
+
+        public string Nonce
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_nonce))
+                    _nonce = Guid.NewGuid().ToString("N");
+                return _nonce;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(_nonce))
+                    _nonce = value;
+            }
+        }
+        public long Timestamp
+        {
+            get
+            {
+                if (_timestamp == 0)
+                    _signature = Guid.NewGuid().ToString("N");
+                return _timestamp;
+            }
+            set
+            {
+                if (_timestamp == 0)
+                    _timestamp = value;
+            }
+        }
+        public string Signature
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_signature))
+                {
+
+                    var param = new string[] { Nonce, Timestamp.ToString(), _secret, Ip, Realm };
+                    Array.Sort(param);
+                    var _sign = String.Join(null, param);
+                }
+                return _signature;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(_signature))
+                    _signature = value;
+            }
+        }
+        public string Crypt
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_crypt))
+                    _crypt = Guid.NewGuid().ToString("N");
+                return _crypt;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(_crypt))
+                    _crypt = value;
+            }
+        }
+    }
 }

@@ -12,7 +12,8 @@ namespace QuickWebApi
         {
             return new webapi<T>(prefix).WithAuthentication(get_authentications(localcode, targetcode));
         }
-        public static webapi<T, tresp> get<tresp>(string localcode, string targetcode, string prefix = null) where tresp : class,new()
+        public static webapi<T, tresp> get<tresp>(string localcode, string targetcode, string prefix = null) 
+            //where tresp : class,new()
         {
             return new webapi<T, tresp>(prefix).WithAuthentication(get_authentications(localcode, targetcode));
         }

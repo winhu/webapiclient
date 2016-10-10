@@ -57,7 +57,8 @@ namespace QuickWebApi
             }
         }
 
-        public result<tresp> Post<tresp>(string requestUri, object data) where tresp : class, new()
+        public result<tresp> Post<tresp>(string requestUri, object data)
+        //where tresp : class, new()
         {
             result<tresp> __result;
             if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
@@ -98,7 +99,8 @@ namespace QuickWebApi
                 return _result;
             }
         }
-        public result<tresp> Get<tresp>(string requestUri, object req) where tresp : class ,new()
+        public result<tresp> Get<tresp>(string requestUri, object req = null)
+        //where tresp : class ,new()
         {
             result<tresp> __result;
             if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
@@ -184,7 +186,8 @@ namespace QuickWebApi
         }
 
 
-        public result<tresp> Put<tresp>(string requestUri, object req) where tresp : class, new()
+        public result<tresp> Put<tresp>(string requestUri, object req)
+        //where tresp : class, new()
         {
             if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
             if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
@@ -201,7 +204,8 @@ namespace QuickWebApi
             }
         }
 
-        public result<tresp> Delete<tresp>(string requestUri, object req) where tresp : class, new()
+        public result<tresp> Delete<tresp>(string requestUri, object req)
+        //where tresp : class, new()
         {
             if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
             if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
@@ -217,5 +221,40 @@ namespace QuickWebApi
                 return __result;
             }
         }
+
+        public result Get(string requestUri)
+        {
+            if (_uri == null) return new result(90000, "未指定服务地址");
+            if (string.IsNullOrWhiteSpace(requestUri)) return new result(90001, "未指定接口地址");
+            using (var client = new HttpClient())
+            {
+                Append_Header(client);
+                result __result;
+                client.BaseAddress = _uri;
+                HttpResponseMessage ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri)).Result;
+                if (!ret.IsSuccessStatusCode)
+                    __result = new result((int)ret.StatusCode, ret.ReasonPhrase);
+                else __result = ret.Content.ReadAsAsync<result>().Result;
+                return __result;
+            }
+        }
+
+        public result<tresp> Get<tresp>(string requestUri)
+        {
+            if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
+            if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
+            using (var client = new HttpClient())
+            {
+                Append_Header(client);
+                result<tresp> __result;
+                client.BaseAddress = _uri;
+                HttpResponseMessage ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri)).Result;
+                if (!ret.IsSuccessStatusCode)
+                    __result = new result<tresp>((int)ret.StatusCode, ret.ReasonPhrase);
+                else __result = ret.Content.ReadAsAsync<result<tresp>>().Result;
+                return __result;
+            }
+        }
+
     }
 }

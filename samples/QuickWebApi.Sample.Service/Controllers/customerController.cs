@@ -24,42 +24,49 @@ namespace QuickWebApi.Sample.Service.Controllers
 
 
     [Route("api/customer_service/{action}/")]
-    [Authorize]
+    //[Authorize]
     public class customerController : ApiController, icustomer
     {
         [HttpGet]
         public IHttpActionResult list()
         {
-            return Ok(new result(0, null, DB.customers.ToList().Count, DB.customers.ToList()));
+            response_list res = new response_list();
+            res.list = DB.customers.ToArray();
+            res.count = res.list.Length;
+            return Ok(new result<response_list>(res));
         }
 
         [HttpGet]
-        public IHttpActionResult info(int customerid)
+        public IHttpActionResult info(ws_model<int, customer> model)
         {
-            return Ok(new result(DB.customers.SingleOrDefault(c => c.id == customerid)));
+            model.response = DB.customers.SingleOrDefault(c => c.id == model.request);
+            return Ok(new result(model));
         }
 
         [HttpPost]
-        public IHttpActionResult update(int id, string name)
+        public IHttpActionResult update(ws_model<request_update, com_result> model)
         {
-            var cust = DB.customers.SingleOrDefault(c => c.id == id);
-            cust.name = name;
-            return Ok(new result());
+            var cust = DB.customers.SingleOrDefault(c => c.id == model.request.id);
+            cust.name = model.request.name;
+            model.response = new com_result();
+            return Ok(new result(model));
         }
 
         [HttpDelete]
-        public IHttpActionResult del(int id)
+        public IHttpActionResult del(ws_model<int, com_result> model)
         {
-            DB.customers.RemoveAll(c => c.id == id);
-            return Ok(new result());
+            DB.customers.RemoveAll(c => c.id == model.request);
+            model.response = new com_result();
+            return Ok(new result(model));
         }
 
         [HttpPut]
-        public IHttpActionResult save(customer customer)
+        public IHttpActionResult save(ws_model<customer, com_result> model)
         {
-            DB.customers.RemoveAll(c => c.id == customer.id);
-            DB.customers.Add(customer);
-            return Ok(new result());
+            DB.customers.RemoveAll(c => c.id == model.request.id);
+            DB.customers.Add(model.request);
+            model.response = new com_result();
+            return Ok(new result(model));
         }
 
 
@@ -82,6 +89,16 @@ namespace QuickWebApi.Sample.Service.Controllers
         public IHttpActionResult pick(long timestamp)
         {
             return Ok(new result(DB.customers.Where(c => c.timestamp > timestamp)));
+        }
+
+
+        [HttpGet]
+        public IHttpActionResult query(int id, string name)
+        {
+            response_list res = new response_list();
+            res.list = DB.customers.Where(c => c.id == id || c.name == name).ToArray();
+            res.count = res.list.Length;
+            return Ok(new result<response_list>(res));
         }
     }
 }

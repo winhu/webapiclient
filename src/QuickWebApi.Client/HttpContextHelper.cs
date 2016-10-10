@@ -17,8 +17,16 @@ namespace QuickWebApi
             return new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
         }
 
+        public static ws_model ApiModel(this HttpContextBase context, string devicecode = "web")
+        //where Trequest : class,new()
+        {
+            ws_model model = new ws_model();
+            model.client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.user = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            return model;
+        }
         public static ws_model<Trequest> ApiModel<Trequest>(this HttpContextBase context, Trequest request, string devicecode = "web")
-            where Trequest : class,new()
+        //where Trequest : class,new()
         {
             ws_model<Trequest> model = new ws_model<Trequest>();
             model.request = request;
@@ -27,8 +35,8 @@ namespace QuickWebApi
             return model;
         }
         public static ws_model<Trequest, Tresponse> ApiModel<Trequest, Tresponse>(this HttpContextBase context, Trequest request, string devicecode = "web")
-            where Trequest : class,new()
-            where Tresponse : class,new()
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
         {
             ws_model<Trequest, Tresponse> model = new ws_model<Trequest, Tresponse>();
             model.request = request;
@@ -38,23 +46,185 @@ namespace QuickWebApi
         }
 
         public static result<ws_model<Trequest, Tresponse>> ApiInvoke<T, Trequest, Tresponse>(this HttpContextBase context, Expression<Func<T, apiaction_o<ws_model<Trequest>>>> func, Trequest request, string prefix = null, string devicecode = "web")
-            where Trequest : class,new()
-            where Tresponse : class,new()
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
         {
             return new webapi<T, ws_model<Trequest, Tresponse>>(prefix).invoke(func, context.ApiModel<Trequest>(request, devicecode));
         }
-        public static result<ws_model<Trequest, Tresponse>> ApiInvoke<T, Trequest, Tresponse>(this HttpContextBase context, Expression<Func<T, apiaction_o<ws_model<Trequest, Tresponse>>>> func, Trequest request, string prefix = null, string devicecode = "web")
-            where Trequest : class,new()
-            where Tresponse : class,new()
+
+        public static result<ws_model<Trequest, Tresponse>> ApiInvoke<T, Trequest, Tresponse>(this HttpContextBase context,
+            Expression<Func<T, apiaction_o<ws_model<Trequest, Tresponse>>>> func,
+            Trequest request,
+            string prefix = null,
+            string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
         {
-            return new webapi<T, ws_model<Trequest, Tresponse>>(prefix).invoke(func, context.ApiModel<Trequest, Tresponse>(request, devicecode));
+            return new webapi<T, ws_model<Trequest, Tresponse>>(prefix).invoke(
+                func,
+                context.ApiModel<Trequest, Tresponse>(request, devicecode));
         }
 
         public static result ApiInvoke<T, Trequest>(this HttpContextBase context, Expression<Func<T, apiaction_o<ws_model<Trequest>>>> func, Trequest request, string prefix = null, string devicecode = "web")
-            where Trequest : class,new()
+        //where Trequest : class,new()
         {
             return new webapi<T>(prefix).invoke(func, context.ApiModel<Trequest>(request, devicecode));
         }
+
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                                    Expression<Func<T, apiaction>> func,
+                                                                    string prefix = null,
+                                                                    string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                                    Expression<Func<T, apiaction_sss>> func, string arg1, string arg2, string arg3,
+                                                                    string prefix = null,
+                                                                    string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_ii>> func, int arg1, int arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_il>> func, int arg1, long arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_ll>> func, long arg1, long arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_li>> func, long arg1, int arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_i>> func, int arg1,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_l>> func, long arg1,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_si>> func, string arg1, int arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_sl>> func, string arg1, long arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_is>> func, int arg1, string arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_ls>> func, long arg1, string arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_ss>> func, string arg1, string arg2,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_ssl>> func, string arg1, string arg2, long arg3,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_ssi>> func, string arg1, string arg2, int arg3,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_sll>> func, string arg1, long arg2, long arg3,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+        }
+        public static result<Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, apiaction_sii>> func, string arg1, int arg2, int arg3,
+                                                           string prefix = null,
+                                                           string devicecode = "web")
+        //where Trequest : class,new()
+        //where Tresponse : class,new()
+        {
+            return new webapi(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+        }
+
 
 
         /// <summary>

@@ -12,12 +12,17 @@ namespace QuickWebApi
 
     public static class HttpContextHelper
     {
-        public static Client RequestDevice(this HttpContextBase context, string devicecode = "web", string deviceinfo = null)
+        public static HttpContextBase Base(this HttpContext context)
+        {
+            return new HttpContextWrapper(context);
+        }
+
+        public static Client GetClientInfo(this HttpContextBase context, string devicecode = "web", string deviceinfo = null)
         {
             return new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
         }
 
-        public static ws_model ApiModel(this HttpContextBase context, string devicecode = "web")
+        internal static ws_model ApiModel(this HttpContextBase context, string devicecode = "web")
         //where Trequest : class,new()
         {
             ws_model model = new ws_model();
@@ -25,7 +30,7 @@ namespace QuickWebApi
             model.user = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
             return model;
         }
-        public static ws_model<Trequest> ApiModel<Trequest>(this HttpContextBase context, Trequest request, string devicecode = "web")
+        internal static ws_model<Trequest> ApiModel<Trequest>(this HttpContextBase context, Trequest request, string devicecode = "web")
         //where Trequest : class,new()
         {
             ws_model<Trequest> model = new ws_model<Trequest>();
@@ -34,7 +39,7 @@ namespace QuickWebApi
             model.user = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
             return model;
         }
-        public static ws_model<Trequest, Tresponse> ApiModel<Trequest, Tresponse>(this HttpContextBase context, Trequest request, string devicecode = "web")
+        internal static ws_model<Trequest, Tresponse> ApiModel<Trequest, Tresponse>(this HttpContextBase context, Trequest request, string devicecode = "web")
         //where Trequest : class,new()
         //where Tresponse : class,new()
         {

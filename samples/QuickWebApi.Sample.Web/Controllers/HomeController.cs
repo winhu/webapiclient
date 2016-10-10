@@ -21,10 +21,15 @@ namespace QuickWebApi.Sample.Web.Controllers
             var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.query, id, name);
             return ret;
         }
+        public object query1(int id = 2, string name = "name3")
+        {
+            var ret = HttpContext.ApiInvoke<icustomer>(i => i.query, id, name);
+            return ret;
+        }
         public JsonResult customer_list()
         {
             var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.list);
-            if (ret.OK() && ret.HasData())
+            if (ret.OK() && ret.HasData() && ret.data.errcode == 0)
             {
                 List<object> custs = new List<object>();
                 foreach (var cust in ret.data.list)

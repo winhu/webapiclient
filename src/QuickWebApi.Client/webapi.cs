@@ -383,6 +383,8 @@ namespace QuickWebApi
         {
             return _invoke<T, tresp>(func.Body);
         }
+
+
         protected result<tresp> _invoke<T, tresp>(Expression exp, params object[] args)
         {
             var method = ((exp as UnaryExpression).Operand as MethodCallExpression);
@@ -435,6 +437,78 @@ namespace QuickWebApi
                 }
             }
             return new result(-1, "未能找到合适的api定义");
+        }
+
+        public result invoke<T>(Expression<Func<T, apiaction_l>> func, long args1)
+        {
+            return _invoke<T>(func.Body, args1);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_ll>> func, long args1, long args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_li>> func, long args1, int args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_ls>> func, long args1, string args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_i>> func, int args1)
+        {
+            return _invoke<T>(func.Body, args1);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_ii>> func, int args1, int args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_il>> func, int args1, long args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_is>> func, int args1, string args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_ss>> func, string args1, string args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_si>> func, string args1, int args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_sl>> func, string args1, long args2)
+        {
+            return _invoke<T>(func.Body, args1, args2);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_sss>> func, string args1, string args2, string args3)
+        {
+            return _invoke<T>(func.Body, args1, args2, args3);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_ssl>> func, string args1, string args2, long args3)
+        {
+            return _invoke<T>(func.Body, args1, args2, args3);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_sll>> func, string args1, long args2, long args3)
+        {
+            return _invoke<T>(func.Body, args1, args2, args3);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_ssi>> func, string args1, string args2, int args3)
+        {
+            return _invoke<T>(func.Body, args1, args2, args3);
+        }
+        public result invoke<T>(Expression<Func<T, apiaction_sii>> func, string args1, int args2, int args3)
+        {
+            return _invoke<T>(func.Body, args1, args2, args3);
+        }
+
+
+        public result invoke<T>(Expression<Func<T, apiaction>> func)
+        //where treq : class,new()
+        {
+            return _invoke<T>(func.Body);
         }
 
     }

@@ -263,7 +263,13 @@ namespace QuickWebApi
             {
                 foreach (var type in types)
                 {
-                    if (type.IsArray || type.IsEnum || type.IsInterface || type.IsValueType || type.Name.StartsWith("List")) continue;
+                    if (type.IsArray ||
+                        type.IsEnum ||
+                        type.IsInterface ||
+                        type.IsValueType ||
+                        type.Name.StartsWith("List") ||
+                        type.IsSubclassOf(typeof(wssupermodel)))
+                        continue;
 
                     DescriptionAttribute patt = type.GetCustomAttribute<DescriptionAttribute>();
                     sb.AppendFormat("类型：{0}, {1}", type.Name, patt == null ? "" : patt.Description);

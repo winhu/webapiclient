@@ -58,8 +58,10 @@
     <Compile Include="request.cs" />
     <Compile Include="i_access_token.cs" />
     <Compile Include="QuickAttributes.cs" />
-    <Compile Include="result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="result.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ws_model.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

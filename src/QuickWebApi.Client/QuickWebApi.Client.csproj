@@ -81,8 +81,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="accesstoken.cs" />
-    <Compile Include="api.cs" />
     <Compile Include="auth.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,7 +90,6 @@
     <Compile Include="invoker.cs" />
     <Compile Include="webapifactory.cs" />
     <Compile Include="webapiclient.cs" />
-    <Compile Include="iwebapiclient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

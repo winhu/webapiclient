@@ -9,17 +9,12 @@ using System.Threading.Tasks;
 namespace QuickWebApi
 {
 
-    public class webapiclient : iwebapiclient
+    public class webapiclient : IDisposable
     {
         Uri _uri;
-        result _result;
-        public result lastest { get { return _result; } }
 
-        //public webapiclient(string baseAddress)
-        //{
-        //    _uri = new Uri(baseAddress);
-        //}
         KeyValuePair<string, string>[] _authentication;
+
         public webapiclient(string baseAddress, KeyValuePair<string, string>[] authentication = null)
         {
             _uri = new Uri(baseAddress);
@@ -36,86 +31,242 @@ namespace QuickWebApi
                 }
             }
         }
-        public result Post(string requestUri, object req)
+
+        public ws_model<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, ws_model<Trequest, Tresponse> model, MethodType mtd)
         {
-            if (_uri == null) return new result(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result(90001, "未指定接口地址");
+            if (model == null)
+            {
+                model = new ws_model<Trequest, Tresponse>();
+                //model.ERROR("参数为空");
+                //return model;
+            }
+
+            if (_uri == null)
+            {
+                model.ERROR(90000, "未指定服务地址");
+                return model;
+            }
+            if (string.IsNullOrWhiteSpace(requestUri))
+            {
+                model.ERROR(90001, "未指定接口地址");
+                return model;
+            }
             using (var client = new HttpClient())
             {
                 Append_Header(client);
-                HttpResponseMessage ret;
+                HttpResponseMessage ret = null;
                 client.BaseAddress = _uri;
                 BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
-                if (req is string)
-                    ret = client.PostAsync(string.Format("{0}?{1}", requestUri, req), new StringContent(string.Empty)).Result;
-                else ret = client.PostAsJsonAsync(requestUri, req).Result;
+                if (mtd == MethodType.HTTPPOST)
+                    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                else if (mtd == MethodType.HTTPPUT)
+                    ret = client.PutAsJsonAsync(requestUri, model).Result;
 
-                if (!ret.IsSuccessStatusCode)
-                    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                else _result = ret.Content.ReadAsAsync<result>().Result;
-                return _result;
+                return HttpResponseMessage2WSModel(ret, model);
             }
         }
 
-        public result<tresp> Post<tresp>(string requestUri, object data)
-        //where tresp : class, new()
+        public ws_model<Trequest> Invoke<Trequest>(string requestUri, ws_model<Trequest> model, MethodType mtd)
         {
-            result<tresp> __result;
-            if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
+            if (model == null)
+            {
+                model = new ws_model<Trequest>();
+                //model.ERROR("参数为空");
+                //return model;
+            }
+            if (_uri == null)
+            {
+                model.ERROR(90000, "未指定服务地址");
+                return model;
+            }
+            if (string.IsNullOrWhiteSpace(requestUri))
+            {
+                model.ERROR(90001, "未指定接口地址");
+                return model;
+            }
             using (var client = new HttpClient())
             {
                 Append_Header(client);
+                HttpResponseMessage ret = null;
                 client.BaseAddress = _uri;
                 BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
-                HttpResponseMessage ret;
-                if (data is string)
-                    ret = client.PostAsync(string.Format("{0}?{1}", requestUri, data), new StringContent(string.Empty)).Result;
-                else ret = client.PostAsJsonAsync(requestUri, data).Result;
-                if (!ret.IsSuccessStatusCode)
-                    __result = new result<tresp>((int)ret.StatusCode, ret.ReasonPhrase);
-                else __result = ret.Content.ReadAsAsync<result<tresp>>().Result;
-                return __result;
+                if (mtd == MethodType.HTTPPOST)
+                    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                else if (mtd == MethodType.HTTPPUT)
+                    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                //else if (mtd == MethodType.HTTPDEL)
+                //    ret = client.PostAsJsonAsync(requestUri, model).Result;
+
+                return HttpResponseMessage2WSModel(ret, model);
+
+                //if (!ret.IsSuccessStatusCode)
+                //    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
+                //else _result = ret.Content.ReadAsAsync<ws_model<Trequest, Tresponse>>().Result;
+                //return _result;
             }
         }
+
+        public ws_model Invoke(string requestUri, ws_model model, MethodType mtd)
+        {
+            if (model == null)
+            {
+                model = new ws_model();
+                //model.ERROR("参数为空");
+                //return model;
+            }
+            if (_uri == null)
+            {
+                model.ERROR(90000, "未指定服务地址");
+                return model;
+            }
+            if (string.IsNullOrWhiteSpace(requestUri))
+            {
+                model.ERROR(90001, "未指定接口地址");
+                return model;
+            }
+            using (var client = new HttpClient())
+            {
+                Append_Header(client);
+                HttpResponseMessage ret = null;
+                client.BaseAddress = _uri;
+                BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
+                if (mtd == MethodType.HTTPPOST)
+                    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                else if (mtd == MethodType.HTTPPUT)
+                    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                //else if (mtd == MethodType.HTTPDEL)
+                //    ret = client.PostAsJsonAsync(requestUri, model).Result;
+
+                return HttpResponseMessage2WSModel(ret, model);
+
+                //if (!ret.IsSuccessStatusCode)
+                //    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
+                //else _result = ret.Content.ReadAsAsync<ws_model<Trequest, Tresponse>>().Result;
+                //return _result;
+            }
+        }
+
+        public ws_model<string, Tresponse> Invoke<Tresponse>(string requestUri, string data, MethodType mtd)
+        {
+            ws_model<string, Tresponse> model = new ws_model<string, Tresponse>();
+            if (_uri == null)
+            {
+                model.ERROR(90000, "未指定服务地址");
+                return model;
+            }
+            if (string.IsNullOrWhiteSpace(requestUri))
+            {
+                model.ERROR(90001, "未指定接口地址");
+                return model;
+            }
+            using (var client = new HttpClient())
+            {
+                Append_Header(client);
+                HttpResponseMessage ret = null;
+                client.BaseAddress = _uri;
+                BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
+                if (mtd == MethodType.HTTPGET)
+                    ret = client.GetAsync(string.Format("{0}?{1}", requestUri, data)).Result;
+
+                return HttpResponseMessage2WSModel(ret, model);
+            }
+        }
+
+        public ws_model<string> Invoke(string requestUri, string data, MethodType mtd)
+        {
+            ws_model<string> model = new ws_model<string>();
+            if (_uri == null)
+            {
+                model.ERROR(90000, "未指定服务地址");
+                return model;
+            }
+            if (string.IsNullOrWhiteSpace(requestUri))
+            {
+                model.ERROR(90001, "未指定接口地址");
+                return model;
+            }
+            using (var client = new HttpClient())
+            {
+                Append_Header(client);
+                HttpResponseMessage ret = null;
+                client.BaseAddress = _uri;
+                BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
+                if (mtd == MethodType.HTTPGET)
+                    ret = client.GetAsync(string.Format("{0}?{1}", requestUri, data)).Result;
+
+                return HttpResponseMessage2WSModel(ret, model);
+            }
+        }
+
+
+        public ws_model<Trequest, Tresponse> HttpResponseMessage2WSModel<Trequest, Tresponse>(HttpResponseMessage response, ws_model<Trequest, Tresponse> model)
+        {
+            if (response == null)
+            {
+                model.ERROR("null HttpResponseMessage");
+                return model;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                model.ERROR((int)response.StatusCode, response.ReasonPhrase);
+                return model;
+            }
+            return response.Content.ReadAsAsync<ws_model<Trequest, Tresponse>>().Result;
+        }
+
+        public ws_model<Trequest> HttpResponseMessage2WSModel<Trequest>(HttpResponseMessage response, ws_model<Trequest> model)
+        {
+            if (response == null)
+            {
+                model.ERROR("null HttpResponseMessage");
+                return model;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                model.ERROR((int)response.StatusCode, response.ReasonPhrase);
+                return model;
+            }
+            return response.Content.ReadAsAsync<ws_model<Trequest>>().Result;
+        }
+
+        public ws_model HttpResponseMessage2WSModel(HttpResponseMessage response, ws_model model)
+        {
+            if (response == null)
+            {
+                model.ERROR("null HttpResponseMessage");
+                return model;
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                model.ERROR((int)response.StatusCode, response.ReasonPhrase);
+                return model;
+            }
+            return response.Content.ReadAsAsync<ws_model>().Result;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public void Dispose()
         {
         }
 
-        public result Get(string requestUri, object req)
-        {
-            if (_uri == null) return new result(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                client.BaseAddress = _uri;
-                BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "GET");
-                HttpResponseMessage ret = client.GetAsync(string.Format("{0}?{1}", requestUri, req)).Result;
-                if (!ret.IsSuccessStatusCode)
-                    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                else _result = ret.Content.ReadAsAsync<result>().Result;
-                return _result;
-            }
-        }
-        public result<tresp> Get<tresp>(string requestUri, object req = null)
-        //where tresp : class ,new()
-        {
-            result<tresp> __result;
-            if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = _uri;
-                BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "GET");
-                HttpResponseMessage ret = client.GetAsync(string.Format("{0}?{1}", requestUri, req)).Result;
-                if (!ret.IsSuccessStatusCode)
-                    __result = new result<tresp>((int)ret.StatusCode, ret.ReasonPhrase);
-                else __result = ret.Content.ReadAsAsync<result<tresp>>().Result;
-                return __result;
-            }
-        }
 
         static long ClientNonceCounter = 0;
         public void BuildHeader(HttpRequestHeaders header, string realm, string uri, string method)
@@ -153,108 +304,6 @@ namespace QuickWebApi
         }
 
 
-        public result Put(string requestUri, object req)
-        {
-            if (_uri == null) return new result(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                client.BaseAddress = _uri;
-                HttpResponseMessage ret = client.PutAsJsonAsync(requestUri, req).Result;
-                if (!ret.IsSuccessStatusCode)
-                    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                else _result = ret.Content.ReadAsAsync<result>().Result;
-                return _result;
-            }
-        }
-
-        public result Delete(string requestUri, object req)
-        {
-            if (_uri == null) return new result(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                client.BaseAddress = _uri;
-                HttpResponseMessage ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri, req)).Result;
-                if (!ret.IsSuccessStatusCode)
-                    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                else _result = ret.Content.ReadAsAsync<result>().Result;
-                return _result;
-            }
-        }
-
-
-        public result<tresp> Put<tresp>(string requestUri, object req)
-        //where tresp : class, new()
-        {
-            if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                result<tresp> __result;
-                client.BaseAddress = _uri;
-                HttpResponseMessage ret = client.PutAsJsonAsync(requestUri, req).Result;
-                if (!ret.IsSuccessStatusCode)
-                    __result = new result<tresp>((int)ret.StatusCode, ret.ReasonPhrase);
-                else __result = ret.Content.ReadAsAsync<result<tresp>>().Result;
-                return __result;
-            }
-        }
-
-        public result<tresp> Delete<tresp>(string requestUri, object req)
-        //where tresp : class, new()
-        {
-            if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                result<tresp> __result;
-                client.BaseAddress = _uri;
-                HttpResponseMessage ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri, req)).Result;
-                if (!ret.IsSuccessStatusCode)
-                    __result = new result<tresp>((int)ret.StatusCode, ret.ReasonPhrase);
-                else __result = ret.Content.ReadAsAsync<result<tresp>>().Result;
-                return __result;
-            }
-        }
-
-        public result Get(string requestUri)
-        {
-            if (_uri == null) return new result(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                result __result;
-                client.BaseAddress = _uri;
-                HttpResponseMessage ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri)).Result;
-                if (!ret.IsSuccessStatusCode)
-                    __result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                else __result = ret.Content.ReadAsAsync<result>().Result;
-                return __result;
-            }
-        }
-
-        public result<tresp> Get<tresp>(string requestUri)
-        {
-            if (_uri == null) return new result<tresp>(90000, "未指定服务地址");
-            if (string.IsNullOrWhiteSpace(requestUri)) return new result<tresp>(90001, "未指定接口地址");
-            using (var client = new HttpClient())
-            {
-                Append_Header(client);
-                result<tresp> __result;
-                client.BaseAddress = _uri;
-                HttpResponseMessage ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri)).Result;
-                if (!ret.IsSuccessStatusCode)
-                    __result = new result<tresp>((int)ret.StatusCode, ret.ReasonPhrase);
-                else __result = ret.Content.ReadAsAsync<result<tresp>>().Result;
-                return __result;
-            }
-        }
 
     }
 }

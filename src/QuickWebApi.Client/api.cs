@@ -6,16 +6,11 @@ using System.Threading.Tasks;
 
 namespace QuickWebApi
 {
-    public class api<T>
+    public class api
     {
-        public static webapi<T> get(string localcode, string targetcode, string prefix = null)
+        public static api get(string localcode, string targetcode, string prefix = null)
         {
-            return new webapi<T>(prefix).WithAuthentication(get_authentications(localcode, targetcode));
-        }
-        public static webapi<T, tresp> get<tresp>(string localcode, string targetcode, string prefix = null) 
-            //where tresp : class,new()
-        {
-            return new webapi<T, tresp>(prefix).WithAuthentication(get_authentications(localcode, targetcode));
+            return new api(prefix).WithAuthentication(get_authentications(localcode, targetcode));
         }
 
         static KeyValuePair<string, string>[] get_authentications(string localcode, string targetcode)

@@ -17,5 +17,14 @@ namespace QuickWebApi.Sample.Service
             webapifactory.Instance.Build_Apis();
             //webapifactory.Instance.Load_Apis();
         }
+
+        protected void Session_Start()
+        {
+            Console.WriteLine(Session.SessionID);
+        }
+        protected void Application_PostAuthorizeRequest()
+        {
+            System.Web.HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+        }
     }
 }

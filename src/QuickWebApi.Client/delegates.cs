@@ -25,5 +25,5 @@ namespace QuickWebApi
     public delegate IHttpActionResult apiaction_ssi(string args1, string args2, int args3);
     public delegate IHttpActionResult apiaction_sii(string args1, int args2, int args3);
     public delegate IHttpActionResult apiaction_o<treq>(treq data);//where treq : class,new();
-    //public delegate IHttpActionResult apiaction_s<treq>(treq data) where treq : struct;
+    public delegate IHttpActionResult apiaction_s(string args);
 }

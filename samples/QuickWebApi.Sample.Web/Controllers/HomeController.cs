@@ -18,6 +18,7 @@ namespace QuickWebApi.Sample.Web.Controllers
         }
         public object query(int id = 2, string name = "name3")
         {
+            //var ret1 = HttpContext.ApiInvoke<icustomer>(i => i.newone, name);
             var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.query, id, name);
             return ret;
         }
@@ -29,10 +30,10 @@ namespace QuickWebApi.Sample.Web.Controllers
         public JsonResult customer_list()
         {
             var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.list);
-            if (ret.OK() && ret.HasData() && ret.data.errcode == 0)
+            if (ret.Ok())
             {
                 List<object> custs = new List<object>();
-                foreach (var cust in ret.data.list)
+                foreach (var cust in ret.response.list)
                 {
                     custs.Add(new { id = cust.id, name = cust.name, age = cust.age });
                 }
@@ -42,7 +43,7 @@ namespace QuickWebApi.Sample.Web.Controllers
         }
         public object info()
         {
-            var ret = HttpContext.ApiInvoke<icustomer, int, customer>(i => i.info, 4);
+            var ret = HttpContext.ApiInvoke<icustomer, int>(i => i.info, 4);
             return ret;
         }
         public object update()
@@ -59,6 +60,11 @@ namespace QuickWebApi.Sample.Web.Controllers
         public object delete()
         {
             var ret = HttpContext.ApiInvoke<icustomer, int, com_result>(i => i.del, 4);
+            return ret;
+        }
+        public object trigger()
+        {
+            var ret = HttpContext.ApiInvoke<icustomer>(i => i.trigger);
             return ret;
         }
     }

@@ -12,7 +12,7 @@ namespace QuickWebApi
         HTTPGET = 1,
         HTTPPOST = 2,
         HTTPPUT = 4,
-        HTTPDEL = 8
+        //HTTPDEL = 8
     }
     [AttributeUsage(AttributeTargets.Assembly)]
     public class WebApiDllAttribute : Attribute

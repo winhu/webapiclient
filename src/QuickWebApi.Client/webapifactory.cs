@@ -87,10 +87,10 @@ namespace QuickWebApi
 
         }
     }
-    public class webapifactory
+    public class QuickWebApiFactory
     {
-        static webapifactory _instance = new webapifactory();
-        public static webapifactory Instance { get { return _instance; } }
+        static QuickWebApiFactory _instance = new QuickWebApiFactory();
+        public static QuickWebApiFactory Instance { get { return _instance; } }
 
         internal WebApiNode Get(string service)
         {
@@ -268,7 +268,7 @@ namespace QuickWebApi
                         type.IsInterface ||
                         type.IsValueType ||
                         type.Name.StartsWith("List") ||
-                        type.IsSubclassOf(typeof(wssupermodel)))
+                        type.IsSubclassOf(typeof(WxSuperModel)))
                         continue;
 
                     DescriptionAttribute patt = type.GetCustomAttribute<DescriptionAttribute>();

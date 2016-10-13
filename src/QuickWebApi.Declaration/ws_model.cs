@@ -8,61 +8,61 @@ using System.Web;
 
 namespace QuickWebApi
 {
-    public class wssupermodel { }
-    public class ws_model<Trequest, Tresponse> : wssupermodel
+    public class WxSuperModel { }
+    public class WsModel<Trequest, Tresponse> : WxSuperModel
     {
-        public ws_model()
+        public WsModel()
         {
-            this.secret = new Secret();
-            time = DateTime.Now;
+            this.Secret = new Secret();
+            Time = DateTime.Now;
         }
-        public ws_model(Trequest request, Client client = null)
+        public WsModel(Trequest request, Client client = null)
         {
-            this.request = request;
-            this.client = client;
-            this.secret = new Secret();
-            time = DateTime.Now;
+            this.Request = request;
+            this.Client = client;
+            this.Secret = new Secret();
+            Time = DateTime.Now;
         }
-        public ws_model(Tresponse response)
+        public WsModel(Tresponse response)
         {
-            this.response = response;
-            time = DateTime.Now;
+            this.Response = response;
+            Time = DateTime.Now;
         }
 
         public virtual void ERROR(int errcode, string msg)
         {
-            this.errcode = errcode;
-            this.errmsg = msg;
+            this.ErrCode = errcode;
+            this.ErrMsg = msg;
         }
         public virtual void ERROR(string msg)
         {
-            this.errcode = -9999;
-            this.errmsg = msg;
+            this.ErrCode = -9999;
+            this.ErrMsg = msg;
         }
         public virtual void ERROR()
         {
-            this.errcode = -9999;
-            this.errmsg = "未知错误";
+            this.ErrCode = -9999;
+            this.ErrMsg = "未知错误";
         }
 
         /// <summary>
         /// indecate successful or fail
         /// </summary>
-        public int errcode { get; set; }
+        public int ErrCode { get; set; }
         /// <summary>
         /// msg for result
         /// </summary>
-        public string errmsg { get; set; }
+        public string ErrMsg { get; set; }
         /// <summary>
         /// result time
         /// </summary>
-        public DateTime time { get; set; }
+        public DateTime Time { get; set; }
 
         /// <summary>
         /// indecate success or fail
         /// </summary>
         /// <returns></returns>
-        public bool Ok() { return errcode == 0; }
+        public bool Ok() { return ErrCode == 0; }
         /// <summary>
         /// indecate success or fail
         /// </summary>
@@ -70,17 +70,17 @@ namespace QuickWebApi
         /// <returns></returns>
         public bool Ok(bool needresponse)
         {
-            return needresponse ? (ValidResponse() && errcode == 0) : errcode == 0;
+            return needresponse ? (ValidResponse() && ErrCode == 0) : ErrCode == 0;
         }
-        public bool Err() { return errcode != 0; }
+        public bool Err() { return ErrCode != 0; }
 
 
-        public Trequest request { get; set; }
-        public Tresponse response { get; set; }
-        public Client client { get; set; }
-        public User user { get; set; }
-        public Secret secret { get; set; }
-        public string signature
+        public Trequest Request { get; set; }
+        public Tresponse Response { get; set; }
+        public Client Client { get; set; }
+        public User User { get; set; }
+        public Secret Secret { get; set; }
+        public string Signature
         {
             get
             {
@@ -93,15 +93,15 @@ namespace QuickWebApi
         private string _signature = null;
         bool ValidSignature()
         {
-            return _signature_set == signature;
+            return _signature_set == Signature;
         }
         void Sign()
         {
-            var sreq = request == null ? "" : JsonConvert.SerializeObject(request);
-            var sresp = response == null ? "" : JsonConvert.SerializeObject(response);
-            var sc = JsonConvert.SerializeObject(client);
-            var su = JsonConvert.SerializeObject(user);
-            var ss = JsonConvert.SerializeObject(secret);
+            var sreq = Request == null ? "" : JsonConvert.SerializeObject(Request);
+            var sresp = Response == null ? "" : JsonConvert.SerializeObject(Response);
+            var sc = JsonConvert.SerializeObject(Client);
+            var su = JsonConvert.SerializeObject(User);
+            var ss = JsonConvert.SerializeObject(Secret);
             var sf = new string[] { sc, sreq, sresp, su, ss };
             Array.Sort(sf);
             _signature = string.Join("", sf).ToSHA1();
@@ -109,38 +109,38 @@ namespace QuickWebApi
 
         public bool ValidRequest()
         {
-            if (request.GetType().IsValueType) return true;
-            return request != null;
+            if (Request.GetType().IsValueType) return true;
+            return Request != null;
         }
         public bool ValidResponse()
         {
-            if (response.GetType().IsValueType) return true;
-            return response != null;
+            if (Response.GetType().IsValueType) return true;
+            return Response != null;
         }
 
         public override string ToString()
         {
             return string.Format("errcode={0},errmsg={1},time={2}",
-                errcode, errmsg, time.ToString("yyyy-MM-dd HH:mm:ss"));
+                ErrCode, ErrMsg, Time.ToString("yyyy-MM-dd HH:mm:ss"));
         }
     }
 
-    public class ws_model<Trequest> : ws_model<Trequest, object>
+    public class WsModel<Trequest> : WsModel<Trequest, object>
     {
-        public ws_model()
+        public WsModel()
             : base()
         { }
-        public ws_model(Trequest request, Client client = null)
+        public WsModel(Trequest request, Client client = null)
             : base(request, client)
         { }
-        public ws_model(object response)
+        public WsModel(object response)
             : base(response)
         { }
     }
 
-    public class ws_model : ws_model<object, object>
+    public class WsModel : WsModel<object, object>
     {
-        public ws_model()
+        public WsModel()
             : base()
         { }
     }

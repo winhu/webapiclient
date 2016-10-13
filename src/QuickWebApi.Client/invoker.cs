@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace QuickWebApi
 {
 
-    internal class invoker : IDisposable
+    internal class Invoker : IDisposable
     {
-        public invoker(string service)
+        public Invoker(string service)
         {
             _service = service;
         }
@@ -112,11 +112,11 @@ namespace QuickWebApi
 
 
 
-        public ws_model<string> Invoke(string requestUri, string data)
+        public WsModel<string> Invoke(string requestUri, string data)
         {
-            ws_model<string> model = new ws_model<string>();
-            model.request = data;
-            var api = webapifactory.Instance.Get(_service);
+            WsModel<string> model = new WsModel<string>();
+            model.Request = data;
+            var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
                 model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
@@ -132,17 +132,17 @@ namespace QuickWebApi
                 model.ERROR(90001, "未指定接口地址");
                 return model;
             }
-            using (webapiclient client = new webapiclient(api.Uri))
+            using (WebApiClient client = new WebApiClient(api.Uri))
             {
                 var mtd = api.Method(requestUri);
                 return client.Invoke(api.Url(requestUri), data, mtd.Method);
             }
         }
-        public ws_model<string, Tresponse> Invoke<Tresponse>(string requestUri, string data)
+        public WsModel<string, Tresponse> Invoke<Tresponse>(string requestUri, string data)
         {
-            ws_model<string, Tresponse> model = new ws_model<string, Tresponse>();
-            model.request = data;
-            var api = webapifactory.Instance.Get(_service);
+            WsModel<string, Tresponse> model = new WsModel<string, Tresponse>();
+            model.Request = data;
+            var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
                 model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
@@ -158,7 +158,7 @@ namespace QuickWebApi
                 model.ERROR(90001, "未指定接口地址");
                 return model;
             }
-            using (webapiclient client = new webapiclient(api.Uri))
+            using (WebApiClient client = new WebApiClient(api.Uri))
             {
                 var mtd = api.Method(requestUri);
                 return client.Invoke<Tresponse>(api.Url(requestUri), data, mtd.Method);
@@ -167,7 +167,7 @@ namespace QuickWebApi
 
 
 
-        public ws_model<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, ws_model<Trequest, Tresponse> model)
+        public WsModel<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, WsModel<Trequest, Tresponse> model)
         {
             //if (model == null)
             //{
@@ -175,7 +175,7 @@ namespace QuickWebApi
             //    model.ERROR("参数为空");
             //    return model;
             //}
-            var api = webapifactory.Instance.Get(_service);
+            var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
                 model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
@@ -191,13 +191,13 @@ namespace QuickWebApi
                 model.ERROR(90001, "未指定接口地址");
                 return model;
             }
-            using (webapiclient client = new webapiclient(api.Uri))
+            using (WebApiClient client = new WebApiClient(api.Uri))
             {
                 var mtd = api.Method(requestUri);
                 return client.Invoke<Trequest, Tresponse>(api.Url(requestUri), model, mtd.Method);
             }
         }
-        public ws_model<Trequest> Invoke<Trequest>(string requestUri, ws_model<Trequest> model)
+        public WsModel<Trequest> Invoke<Trequest>(string requestUri, WsModel<Trequest> model)
         {
             //if (model == null)
             //{
@@ -205,7 +205,7 @@ namespace QuickWebApi
             //    model.ERROR("参数为空");
             //    return model;
             //}
-            var api = webapifactory.Instance.Get(_service);
+            var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
                 model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
@@ -221,13 +221,13 @@ namespace QuickWebApi
                 model.ERROR(90001, "未指定接口地址");
                 return model;
             }
-            using (webapiclient client = new webapiclient(api.Uri))
+            using (WebApiClient client = new WebApiClient(api.Uri))
             {
                 var mtd = api.Method(requestUri);
                 return client.Invoke<Trequest>(api.Url(requestUri), model, mtd.Method);
             }
         }
-        public ws_model Invoke(string requestUri, ws_model model)
+        public WsModel Invoke(string requestUri, WsModel model)
         {
             //if (model == null)
             //{
@@ -235,7 +235,7 @@ namespace QuickWebApi
             //    model.ERROR("参数为空");
             //    return model;
             //}
-            var api = webapifactory.Instance.Get(_service);
+            var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
                 model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
@@ -251,7 +251,7 @@ namespace QuickWebApi
                 model.ERROR(90001, "未指定接口地址");
                 return model;
             }
-            using (webapiclient client = new webapiclient(api.Uri))
+            using (WebApiClient client = new WebApiClient(api.Uri))
             {
                 var mtd = api.Method(requestUri);
                 return client.Invoke(api.Url(requestUri), model, mtd.Method);

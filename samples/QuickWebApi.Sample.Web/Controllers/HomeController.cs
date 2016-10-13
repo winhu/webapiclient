@@ -33,7 +33,7 @@ namespace QuickWebApi.Sample.Web.Controllers
             if (ret.Ok())
             {
                 List<object> custs = new List<object>();
-                foreach (var cust in ret.response.list)
+                foreach (var cust in ret.Response.list)
                 {
                     custs.Add(new { id = cust.id, name = cust.name, age = cust.age });
                 }

@@ -7,23 +7,23 @@ using System.Web.Http;
 
 namespace QuickWebApi
 {
-    public delegate IHttpActionResult apiaction();
-    public delegate IHttpActionResult apiaction_l(long args);
-    public delegate IHttpActionResult apiaction_ll(long args1, long args2);
-    public delegate IHttpActionResult apiaction_li(long args1, int arg2);
-    public delegate IHttpActionResult apiaction_ls(long args1, string args2);
-    public delegate IHttpActionResult apiaction_i(int args1);
-    public delegate IHttpActionResult apiaction_ii(int args1, int args2);
-    public delegate IHttpActionResult apiaction_is(int args1, string args2);
-    public delegate IHttpActionResult apiaction_il(int args1, long args2);
-    public delegate IHttpActionResult apiaction_si(string args1, int args2);
-    public delegate IHttpActionResult apiaction_ss(string args1, string args2);
-    public delegate IHttpActionResult apiaction_sl(string args1, long args2);
-    public delegate IHttpActionResult apiaction_sss(string args1, string args2, string args3);
-    public delegate IHttpActionResult apiaction_ssl(string args1, string args2, long args3);
-    public delegate IHttpActionResult apiaction_sll(string args1, long args2, long args3);
-    public delegate IHttpActionResult apiaction_ssi(string args1, string args2, int args3);
-    public delegate IHttpActionResult apiaction_sii(string args1, int args2, int args3);
-    public delegate IHttpActionResult apiaction_o<treq>(treq data);//where treq : class,new();
-    public delegate IHttpActionResult apiaction_s(string args);
+    public delegate IHttpActionResult ApiAction();
+    public delegate IHttpActionResult ApiActionL(long args);
+    public delegate IHttpActionResult ApiActionLL(long args1, long args2);
+    public delegate IHttpActionResult ApiActionLI(long args1, int arg2);
+    public delegate IHttpActionResult ApiActionLS(long args1, string args2);
+    public delegate IHttpActionResult ApiActionI(int args1);
+    public delegate IHttpActionResult ApiActionII(int args1, int args2);
+    public delegate IHttpActionResult ApiActionIS(int args1, string args2);
+    public delegate IHttpActionResult ApiActionIL(int args1, long args2);
+    public delegate IHttpActionResult ApiActionSI(string args1, int args2);
+    public delegate IHttpActionResult ApiActionSS(string args1, string args2);
+    public delegate IHttpActionResult ApiActionSL(string args1, long args2);
+    public delegate IHttpActionResult ApiActionSSS(string args1, string args2, string args3);
+    public delegate IHttpActionResult ApiActionSSL(string args1, string args2, long args3);
+    public delegate IHttpActionResult ApiActionSLL(string args1, long args2, long args3);
+    public delegate IHttpActionResult ApiActionSSI(string args1, string args2, int args3);
+    public delegate IHttpActionResult ApiActionSII(string args1, int args2, int args3);
+    public delegate IHttpActionResult ApiActionO<treq>(treq data);//where treq : class,new();
+    public delegate IHttpActionResult ApiActionS(string args);
 }

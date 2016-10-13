@@ -23,27 +23,27 @@ namespace QuickWebApi
             return new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
         }
 
-        public static ws_model ApiModel(this HttpContextBase context, string devicecode = "web")
+        public static WsModel ApiModel(this HttpContextBase context, string devicecode = "web")
         {
-            ws_model model = new ws_model();
-            model.client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
-            model.user = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            WsModel model = new WsModel();
+            model.Client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.User = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
             return model;
         }
-        public static ws_model<Trequest> ApiModel<Trequest>(this HttpContextBase context, Trequest request, string devicecode = "web")
+        public static WsModel<Trequest> ApiModel<Trequest>(this HttpContextBase context, Trequest request, string devicecode = "web")
         {
-            ws_model<Trequest> model = new ws_model<Trequest>();
-            model.request = request;
-            model.client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
-            model.user = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            WsModel<Trequest> model = new WsModel<Trequest>();
+            model.Request = request;
+            model.Client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.User = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
             return model;
         }
-        public static ws_model<Trequest, Tresponse> ApiModel<Trequest, Tresponse>(this HttpContextBase context, Trequest request, string devicecode = "web")
+        public static WsModel<Trequest, Tresponse> ApiModel<Trequest, Tresponse>(this HttpContextBase context, Trequest request, string devicecode = "web")
         {
-            ws_model<Trequest, Tresponse> model = new ws_model<Trequest, Tresponse>();
-            model.request = request;
-            model.client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
-            model.user = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            WsModel<Trequest, Tresponse> model = new WsModel<Trequest, Tresponse>();
+            model.Request = request;
+            model.Client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.User = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
             return model;
         }
         #endregion
@@ -58,14 +58,14 @@ namespace QuickWebApi
         //    //return new webapi<T, ws_model<Trequest, Tresponse>>(prefix).invoke(func, context.ApiModel<Trequest>(request, devicecode));
         //}
 
-        public static ws_model<Trequest, Tresponse> ApiInvoke<T, Trequest, Tresponse>(this HttpContextBase context,
-            Expression<Func<T, apiaction_o<ws_model<Trequest, Tresponse>>>> func,
+        public static WsModel<Trequest, Tresponse> ApiInvoke<T, Trequest, Tresponse>(this HttpContextBase context,
+            Expression<Func<T, ApiActionO<WsModel<Trequest, Tresponse>>>> func,
             Trequest request,
             string prefix = null,
             string devicecode = "web")
         {
 
-            return new api(prefix).invoke<T, Trequest, Tresponse>(
+            return new Api(prefix).invoke<T, Trequest, Tresponse>(
                 func,
                 context.ApiModel<Trequest, Tresponse>(request, devicecode));
 
@@ -78,255 +78,255 @@ namespace QuickWebApi
             //    context.ApiModel<Trequest, Tresponse>(request, devicecode));
         }
 
-        public static ws_model<Trequest> ApiInvoke<T, Trequest>(this HttpContextBase context,
-            Expression<Func<T, apiaction_o<ws_model<Trequest>>>> func,
+        public static WsModel<Trequest> ApiInvoke<T, Trequest>(this HttpContextBase context,
+            Expression<Func<T, ApiActionO<WsModel<Trequest>>>> func,
             Trequest request,
             string prefix = null,
             string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Trequest>(func, context.ApiModel<Trequest>(request, devicecode));
+            return new Api(prefix).invoke<T, Trequest>(func, context.ApiModel<Trequest>(request, devicecode));
         }
 
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                                    Expression<Func<T, apiaction>> func,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                                    Expression<Func<T, ApiAction>> func,
                                                                     string prefix = null,
                                                                     string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func);
+            return new Api(prefix).invoke<T, Tresponse>(func);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                                    Expression<Func<T, apiaction_sss>> func, string arg1, string arg2, string arg3,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                                    Expression<Func<T, ApiActionSSS>> func, string arg1, string arg2, string arg3,
                                                                     string prefix = null,
                                                                     string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ii>> func, int arg1, int arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionII>> func, int arg1, int arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_il>> func, int arg1, long arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionIL>> func, int arg1, long arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ll>> func, long arg1, long arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionLL>> func, long arg1, long arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_li>> func, long arg1, int arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionLI>> func, long arg1, int arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_i>> func, int arg1,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionI>> func, int arg1,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_l>> func, long arg1,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionL>> func, long arg1,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_si>> func, string arg1, int arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSI>> func, string arg1, int arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_sl>> func, string arg1, long arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSL>> func, string arg1, long arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_is>> func, int arg1, string arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionIS>> func, int arg1, string arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ls>> func, long arg1, string arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionLS>> func, long arg1, string arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ss>> func, string arg1, string arg2,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSS>> func, string arg1, string arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ssl>> func, string arg1, string arg2, long arg3,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSSL>> func, string arg1, string arg2, long arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ssi>> func, string arg1, string arg2, int arg3,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSSI>> func, string arg1, string arg2, int arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_sll>> func, string arg1, long arg2, long arg3,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSLL>> func, string arg1, long arg2, long arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_sii>> func, string arg1, int arg2, int arg3,
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSII>> func, string arg1, int arg2, int arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T, Tresponse>(func, arg1, arg2, arg3);
         }
 
         //==================================================================================
 
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                                    Expression<Func<T, apiaction>> func,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                                    Expression<Func<T, ApiAction>> func,
                                                                     string prefix = null,
                                                                     string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func);
+            return new Api(prefix).invoke<T>(func);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                                    Expression<Func<T, apiaction_sss>> func, string arg1, string arg2, string arg3,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                                    Expression<Func<T, ApiActionSSS>> func, string arg1, string arg2, string arg3,
                                                                     string prefix = null,
                                                                     string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ii>> func, int arg1, int arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionII>> func, int arg1, int arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_il>> func, int arg1, long arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionIL>> func, int arg1, long arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ll>> func, long arg1, long arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionLL>> func, long arg1, long arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_li>> func, long arg1, int arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionLI>> func, long arg1, int arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_i>> func, int arg1,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionI>> func, int arg1,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1);
+            return new Api(prefix).invoke<T>(func, arg1);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_l>> func, long arg1,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionL>> func, long arg1,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1);
+            return new Api(prefix).invoke<T>(func, arg1);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_si>> func, string arg1, int arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSI>> func, string arg1, int arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_sl>> func, string arg1, long arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSL>> func, string arg1, long arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_is>> func, int arg1, string arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionIS>> func, int arg1, string arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ls>> func, long arg1, string arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionLS>> func, long arg1, string arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ss>> func, string arg1, string arg2,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSS>> func, string arg1, string arg2,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2);
+            return new Api(prefix).invoke<T>(func, arg1, arg2);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ssl>> func, string arg1, string arg2, long arg3,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSSL>> func, string arg1, string arg2, long arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_ssi>> func, string arg1, string arg2, int arg3,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSSI>> func, string arg1, string arg2, int arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_sll>> func, string arg1, long arg2, long arg3,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSLL>> func, string arg1, long arg2, long arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T>(func, arg1, arg2, arg3);
         }
-        public static ws_model<string> ApiInvoke<T>(this HttpContextBase context,
-                                                           Expression<Func<T, apiaction_sii>> func, string arg1, int arg2, int arg3,
+        public static WsModel<string> ApiInvoke<T>(this HttpContextBase context,
+                                                           Expression<Func<T, ApiActionSII>> func, string arg1, int arg2, int arg3,
                                                            string prefix = null,
                                                            string devicecode = "web")
         {
-            return new api(prefix).invoke<T>(func, arg1, arg2, arg3);
+            return new Api(prefix).invoke<T>(func, arg1, arg2, arg3);
         }
 
 

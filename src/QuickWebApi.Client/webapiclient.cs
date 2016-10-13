@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace QuickWebApi
 {
 
-    public class webapiclient : IDisposable
+    public class WebApiClient : IDisposable
     {
         Uri _uri;
 
         KeyValuePair<string, string>[] _authentication;
 
-        public webapiclient(string baseAddress, KeyValuePair<string, string>[] authentication = null)
+        public WebApiClient(string baseAddress, KeyValuePair<string, string>[] authentication = null)
         {
             _uri = new Uri(baseAddress);
             _authentication = authentication;
@@ -32,11 +32,11 @@ namespace QuickWebApi
             }
         }
 
-        public ws_model<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, ws_model<Trequest, Tresponse> model, MethodType mtd)
+        public WsModel<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, WsModel<Trequest, Tresponse> model, MethodType mtd)
         {
             if (model == null)
             {
-                model = new ws_model<Trequest, Tresponse>();
+                model = new WsModel<Trequest, Tresponse>();
                 //model.ERROR("参数为空");
                 //return model;
             }
@@ -66,11 +66,11 @@ namespace QuickWebApi
             }
         }
 
-        public ws_model<Trequest> Invoke<Trequest>(string requestUri, ws_model<Trequest> model, MethodType mtd)
+        public WsModel<Trequest> Invoke<Trequest>(string requestUri, WsModel<Trequest> model, MethodType mtd)
         {
             if (model == null)
             {
-                model = new ws_model<Trequest>();
+                model = new WsModel<Trequest>();
                 //model.ERROR("参数为空");
                 //return model;
             }
@@ -106,11 +106,11 @@ namespace QuickWebApi
             }
         }
 
-        public ws_model Invoke(string requestUri, ws_model model, MethodType mtd)
+        public WsModel Invoke(string requestUri, WsModel model, MethodType mtd)
         {
             if (model == null)
             {
-                model = new ws_model();
+                model = new WsModel();
                 //model.ERROR("参数为空");
                 //return model;
             }
@@ -146,9 +146,9 @@ namespace QuickWebApi
             }
         }
 
-        public ws_model<string, Tresponse> Invoke<Tresponse>(string requestUri, string data, MethodType mtd)
+        public WsModel<string, Tresponse> Invoke<Tresponse>(string requestUri, string data, MethodType mtd)
         {
-            ws_model<string, Tresponse> model = new ws_model<string, Tresponse>();
+            WsModel<string, Tresponse> model = new WsModel<string, Tresponse>();
             if (_uri == null)
             {
                 model.ERROR(90000, "未指定服务地址");
@@ -172,9 +172,9 @@ namespace QuickWebApi
             }
         }
 
-        public ws_model<string> Invoke(string requestUri, string data, MethodType mtd)
+        public WsModel<string> Invoke(string requestUri, string data, MethodType mtd)
         {
-            ws_model<string> model = new ws_model<string>();
+            WsModel<string> model = new WsModel<string>();
             if (_uri == null)
             {
                 model.ERROR(90000, "未指定服务地址");
@@ -199,7 +199,7 @@ namespace QuickWebApi
         }
 
 
-        public ws_model<Trequest, Tresponse> HttpResponseMessage2WSModel<Trequest, Tresponse>(HttpResponseMessage response, ws_model<Trequest, Tresponse> model)
+        public WsModel<Trequest, Tresponse> HttpResponseMessage2WSModel<Trequest, Tresponse>(HttpResponseMessage response, WsModel<Trequest, Tresponse> model)
         {
             if (response == null)
             {
@@ -211,10 +211,10 @@ namespace QuickWebApi
                 model.ERROR((int)response.StatusCode, response.ReasonPhrase);
                 return model;
             }
-            return response.Content.ReadAsAsync<ws_model<Trequest, Tresponse>>().Result;
+            return response.Content.ReadAsAsync<WsModel<Trequest, Tresponse>>().Result;
         }
 
-        public ws_model<Trequest> HttpResponseMessage2WSModel<Trequest>(HttpResponseMessage response, ws_model<Trequest> model)
+        public WsModel<Trequest> HttpResponseMessage2WSModel<Trequest>(HttpResponseMessage response, WsModel<Trequest> model)
         {
             if (response == null)
             {
@@ -226,10 +226,10 @@ namespace QuickWebApi
                 model.ERROR((int)response.StatusCode, response.ReasonPhrase);
                 return model;
             }
-            return response.Content.ReadAsAsync<ws_model<Trequest>>().Result;
+            return response.Content.ReadAsAsync<WsModel<Trequest>>().Result;
         }
 
-        public ws_model HttpResponseMessage2WSModel(HttpResponseMessage response, ws_model model)
+        public WsModel HttpResponseMessage2WSModel(HttpResponseMessage response, WsModel model)
         {
             if (response == null)
             {
@@ -241,7 +241,7 @@ namespace QuickWebApi
                 model.ERROR((int)response.StatusCode, response.ReasonPhrase);
                 return model;
             }
-            return response.Content.ReadAsAsync<ws_model>().Result;
+            return response.Content.ReadAsAsync<WsModel>().Result;
         }
 
 

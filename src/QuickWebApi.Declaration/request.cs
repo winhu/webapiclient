@@ -11,17 +11,17 @@ namespace QuickWebApi
         public Client() { }
         public Client(string ip, string sn_imei, string sn_imsi, string devicecode, string deviceinfo)
         {
-            this.ip = ip;
-            this.sn_imei = sn_imei;
-            this.sn_imsi = sn_imsi;
-            this.devicecode = devicecode;
-            this.deviceinfo = deviceinfo;
+            this.Ip = ip;
+            this.Imei = sn_imei;
+            this.Imsi = sn_imsi;
+            this.DeviceCode = devicecode;
+            this.DeviceInfo = deviceinfo;
         }
-        public string sn_imsi { get; set; }
-        public string sn_imei { get; set; }
-        public string ip { get; set; }
-        public string devicecode { get; set; }
-        public string deviceinfo { get; set; }
+        public string Imsi { get; set; }
+        public string Imei { get; set; }
+        public string Ip { get; set; }
+        public string DeviceCode { get; set; }
+        public string DeviceInfo { get; set; }
     }
 
     public class User
@@ -30,18 +30,18 @@ namespace QuickWebApi
         public User(string sessionid, object ticket = null, string uid = null, string orgcode = null, string syscode = null)
         {
             if (ticket != null)
-                this.ticket = ticket.ToString();
-            this.uid = uid;
-            this.sessionid = sessionid;
-            this.orgcode = orgcode;
-            this.syscode = syscode;
+                this.Ticket = ticket.ToString();
+            this.Uid = uid;
+            this.SessionId = sessionid;
+            this.OrgCode = orgcode;
+            this.SysCode = syscode;
         }
 
-        public string ticket { get; set; }
-        public string uid { get; set; }
-        public string orgcode { get; set; }
-        public string syscode { get; set; }
-        public string sessionid { get; set; }
+        public string Ticket { get; set; }
+        public string Uid { get; set; }
+        public string OrgCode { get; set; }
+        public string SysCode { get; set; }
+        public string SessionId { get; set; }
     }
 
     public class Secret

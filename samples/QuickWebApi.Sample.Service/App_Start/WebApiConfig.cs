@@ -10,7 +10,7 @@ namespace QuickWebApi.Sample.Service
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            webapifactory.Instance.Register_JsonFormatter(config);
+            QuickWebApiFactory.Instance.Register_JsonFormatter(config);
             // Web API routes
             config.MapHttpAttributeRoutes();
 

@@ -20,98 +20,6 @@ namespace QuickWebApi
         {
         }
 
-
-
-        //public result Excute(string requestUri, string data)
-        //{
-        //    var api = webapifactory.Instance.Get(_service);
-        //    if (api == null) return new result(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
-        //    using (iwebapiclient client = new webapiclient(api.Uri))
-        //    {
-        //        var mtd = api.Method(requestUri);
-        //        //var code = apiconfig_factory.Instance.GetNode(_server, requestUri);
-        //        switch (mtd.MT)
-        //        {
-        //            case MethodType.HTTPGET:
-        //                return client.Get(api.Url(requestUri), data);
-        //            case MethodType.HTTPPOST:
-        //                return client.Post(api.Url(requestUri), data);
-        //            case MethodType.HTTPPUT:
-        //                return client.Put(api.Url(requestUri), data);
-        //            case MethodType.HTTPDEL:
-        //                return client.Delete(api.Url(requestUri), data);
-        //        }
-        //    }
-        //    return new result(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri, requestUri));
-        //}
-
-        //public result Excute(string requestUri)
-        //{
-        //    var api = webapifactory.Instance.Get(_service);
-        //    if (api == null) return new result(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
-        //    using (iwebapiclient client = new webapiclient(api.Uri))
-        //    {
-        //        var mtd = api.Method(requestUri);
-        //        switch (mtd.Method)
-        //        {
-        //            case MethodType.HTTPGET:
-        //                return client.Get(api.Url(requestUri));
-        //        }
-        //    }
-        //    return new result(-1, string.Format("未找到{0}->{1}.{2}的webapi配置", _service, requestUri, requestUri));
-        //}
-
-        //public result Excute(string requestUri, object req)
-        //{
-        //    var api = webapifactory.Instance.Get(_service);
-        //    if (api == null) return new result(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
-        //    using (iwebapiclient client = new webapiclient(api.Uri))
-        //    {
-        //        var mtd = api.Method(requestUri);
-        //        switch (mtd.Method)
-        //        {
-        //            case MethodType.HTTPGET:
-        //                return client.Get(api.Url(requestUri), req);
-        //            case MethodType.HTTPPOST:
-        //                return client.Post(api.Url(requestUri), req);
-        //            case MethodType.HTTPPUT:
-        //                return client.Put(api.Url(requestUri), req);
-        //            //case MethodType.HTTPDEL:
-        //            //    return client.Delete(api.Url(requestUri), req);
-        //        }
-        //    }
-        //    return new result(-1, string.Format("未找到{0}->{1}.{2}的webapi配置", _service, requestUri, requestUri));
-        //}
-
-        //public result<tresp> Excute<tresp>(string requestUri, object req)
-        //{
-        //    var api = webapifactory.Instance.Get(_service);
-        //    if (api == null) return new result<tresp>(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
-        //    using (iwebapiclient client = new webapiclient(api.Uri))
-        //    {
-        //        var mtd = api.Method(requestUri);
-        //        switch (mtd.Method)
-        //        {
-        //            case MethodType.HTTPGET:
-        //                return client.Get<tresp>(api.Url(requestUri), req);
-        //            case MethodType.HTTPPOST:
-        //                return client.Post<tresp>(api.Url(requestUri), req);
-        //            case MethodType.HTTPPUT:
-        //                return client.Put<tresp>(api.Url(requestUri), req);
-        //            //case MethodType.HTTPDEL:
-        //            //    return client.Delete<tresp>(api.Url(requestUri), req);
-        //        }
-        //    }
-        //    return new result<tresp>(-1, string.Format("未找到{0}->{1}.{2}的webapi配置", _service, requestUri, requestUri));
-        //}
-
-
-
-
-
-
-
-
         public WsModel<string> Invoke(string requestUri, string data)
         {
             WsModel<string> model = new WsModel<string>();
@@ -119,17 +27,17 @@ namespace QuickWebApi
             var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
-                model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
+                model.ERROR(-9999998, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Uri))
             {
-                model.ERROR(90000, "未指定服务地址");
+                model.ERROR(-9999997, "未指定服务地址");
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Url(requestUri)))
             {
-                model.ERROR(90001, "未指定接口地址");
+                model.ERROR(-9999996, "未指定接口路由");
                 return model;
             }
             using (WebApiClient client = new WebApiClient(api.Uri))
@@ -145,17 +53,17 @@ namespace QuickWebApi
             var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
-                model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
+                model.ERROR(-9999998, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Uri))
             {
-                model.ERROR(90000, "未指定服务地址");
+                model.ERROR(-9999997, "未指定服务地址");
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Url(requestUri)))
             {
-                model.ERROR(90001, "未指定接口地址");
+                model.ERROR(-9999996, "未指定接口路由");
                 return model;
             }
             using (WebApiClient client = new WebApiClient(api.Uri))
@@ -169,26 +77,20 @@ namespace QuickWebApi
 
         public WsModel<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, WsModel<Trequest, Tresponse> model)
         {
-            //if (model == null)
-            //{
-            //    model = new ws_model<Trequest, Tresponse>();
-            //    model.ERROR("参数为空");
-            //    return model;
-            //}
             var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
-                model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
+                model.ERROR(-9999998, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Uri))
             {
-                model.ERROR(90000, "未指定服务地址");
+                model.ERROR(-9999997, "未指定服务地址");
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Url(requestUri)))
             {
-                model.ERROR(90001, "未指定接口地址");
+                model.ERROR(-9999996, "未指定接口路由");
                 return model;
             }
             using (WebApiClient client = new WebApiClient(api.Uri))
@@ -199,26 +101,20 @@ namespace QuickWebApi
         }
         public WsModel<Trequest> Invoke<Trequest>(string requestUri, WsModel<Trequest> model)
         {
-            //if (model == null)
-            //{
-            //    model = new ws_model<Trequest>();
-            //    model.ERROR("参数为空");
-            //    return model;
-            //}
             var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
-                model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
+                model.ERROR(-9999998, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Uri))
             {
-                model.ERROR(90000, "未指定服务地址");
+                model.ERROR(-9999997, "未指定服务地址");
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Url(requestUri)))
             {
-                model.ERROR(90001, "未指定接口地址");
+                model.ERROR(-9999996, "未指定接口路由");
                 return model;
             }
             using (WebApiClient client = new WebApiClient(api.Uri))
@@ -229,26 +125,20 @@ namespace QuickWebApi
         }
         public WsModel Invoke(string requestUri, WsModel model)
         {
-            //if (model == null)
-            //{
-            //    model = new ws_model();
-            //    model.ERROR("参数为空");
-            //    return model;
-            //}
             var api = QuickWebApiFactory.Instance.Get(_service);
             if (api == null)
             {
-                model.ERROR(-1, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
+                model.ERROR(-9999998, string.Format("未找到{0}->{1}的webapi配置", _service, requestUri));
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Uri))
             {
-                model.ERROR(90000, "未指定服务地址");
+                model.ERROR(-9999997, "未指定服务地址");
                 return model;
             }
             if (string.IsNullOrWhiteSpace(api.Url(requestUri)))
             {
-                model.ERROR(90001, "未指定接口地址");
+                model.ERROR(-9999996, "未指定接口路由");
                 return model;
             }
             using (WebApiClient client = new WebApiClient(api.Uri))

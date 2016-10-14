@@ -35,22 +35,8 @@ namespace QuickWebApi
         public WsModel<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, WsModel<Trequest, Tresponse> model, MethodType mtd)
         {
             if (model == null)
-            {
                 model = new WsModel<Trequest, Tresponse>();
-                //model.ERROR("参数为空");
-                //return model;
-            }
 
-            if (_uri == null)
-            {
-                model.ERROR(90000, "未指定服务地址");
-                return model;
-            }
-            if (string.IsNullOrWhiteSpace(requestUri))
-            {
-                model.ERROR(90001, "未指定接口地址");
-                return model;
-            }
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -61,7 +47,12 @@ namespace QuickWebApi
                     ret = client.PostAsJsonAsync(requestUri, model).Result;
                 else if (mtd == MethodType.HTTPPUT)
                     ret = client.PutAsJsonAsync(requestUri, model).Result;
+                else
+                {
 
+                    model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
+                    return model;
+                }
                 return HttpResponseMessage2WSModel(ret, model);
             }
         }
@@ -69,21 +60,8 @@ namespace QuickWebApi
         public WsModel<Trequest> Invoke<Trequest>(string requestUri, WsModel<Trequest> model, MethodType mtd)
         {
             if (model == null)
-            {
                 model = new WsModel<Trequest>();
-                //model.ERROR("参数为空");
-                //return model;
-            }
-            if (_uri == null)
-            {
-                model.ERROR(90000, "未指定服务地址");
-                return model;
-            }
-            if (string.IsNullOrWhiteSpace(requestUri))
-            {
-                model.ERROR(90001, "未指定接口地址");
-                return model;
-            }
+
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -96,34 +74,21 @@ namespace QuickWebApi
                     ret = client.PostAsJsonAsync(requestUri, model).Result;
                 //else if (mtd == MethodType.HTTPDEL)
                 //    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                else
+                {
 
+                    model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
+                    return model;
+                }
                 return HttpResponseMessage2WSModel(ret, model);
-
-                //if (!ret.IsSuccessStatusCode)
-                //    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                //else _result = ret.Content.ReadAsAsync<ws_model<Trequest, Tresponse>>().Result;
-                //return _result;
             }
         }
 
         public WsModel Invoke(string requestUri, WsModel model, MethodType mtd)
         {
             if (model == null)
-            {
                 model = new WsModel();
-                //model.ERROR("参数为空");
-                //return model;
-            }
-            if (_uri == null)
-            {
-                model.ERROR(90000, "未指定服务地址");
-                return model;
-            }
-            if (string.IsNullOrWhiteSpace(requestUri))
-            {
-                model.ERROR(90001, "未指定接口地址");
-                return model;
-            }
+
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -133,32 +98,22 @@ namespace QuickWebApi
                 if (mtd == MethodType.HTTPPOST)
                     ret = client.PostAsJsonAsync(requestUri, model).Result;
                 else if (mtd == MethodType.HTTPPUT)
-                    ret = client.PostAsJsonAsync(requestUri, model).Result;
-                //else if (mtd == MethodType.HTTPDEL)
-                //    ret = client.PostAsJsonAsync(requestUri, model).Result;
+                    ret = client.PutAsJsonAsync(requestUri, model).Result;
+                else
+                {
+
+                    model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
+                    return model;
+                }
 
                 return HttpResponseMessage2WSModel(ret, model);
-
-                //if (!ret.IsSuccessStatusCode)
-                //    _result = new result((int)ret.StatusCode, ret.ReasonPhrase);
-                //else _result = ret.Content.ReadAsAsync<ws_model<Trequest, Tresponse>>().Result;
-                //return _result;
             }
         }
 
         public WsModel<string, Tresponse> Invoke<Tresponse>(string requestUri, string data, MethodType mtd)
         {
             WsModel<string, Tresponse> model = new WsModel<string, Tresponse>();
-            if (_uri == null)
-            {
-                model.ERROR(90000, "未指定服务地址");
-                return model;
-            }
-            if (string.IsNullOrWhiteSpace(requestUri))
-            {
-                model.ERROR(90001, "未指定接口地址");
-                return model;
-            }
+
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -167,7 +122,16 @@ namespace QuickWebApi
                 BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
                 if (mtd == MethodType.HTTPGET)
                     ret = client.GetAsync(string.Format("{0}?{1}", requestUri, data)).Result;
+                else if (mtd == MethodType.HTTPPOST)
+                    ret = client.PostAsync(string.Format("{0}?{1}", requestUri, data), new StringContent(string.Empty)).Result;
+                else if (mtd == MethodType.HTTPDEL)
+                    ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri, data)).Result;
+                else
+                {
 
+                    model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
+                    return model;
+                }
                 return HttpResponseMessage2WSModel(ret, model);
             }
         }
@@ -175,16 +139,7 @@ namespace QuickWebApi
         public WsModel<string> Invoke(string requestUri, string data, MethodType mtd)
         {
             WsModel<string> model = new WsModel<string>();
-            if (_uri == null)
-            {
-                model.ERROR(90000, "未指定服务地址");
-                return model;
-            }
-            if (string.IsNullOrWhiteSpace(requestUri))
-            {
-                model.ERROR(90001, "未指定接口地址");
-                return model;
-            }
+
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -193,17 +148,25 @@ namespace QuickWebApi
                 BuildHeader(client.DefaultRequestHeaders, client.BaseAddress.Authority, requestUri, "POST");
                 if (mtd == MethodType.HTTPGET)
                     ret = client.GetAsync(string.Format("{0}?{1}", requestUri, data)).Result;
+                else if (mtd == MethodType.HTTPPOST)
+                    ret = client.PostAsync(string.Format("{0}?{1}", requestUri, data), new StringContent(string.Empty)).Result;
+                else if (mtd == MethodType.HTTPDEL)
+                    ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri, data)).Result;
+                else
+                {
 
+                    model.ERROR(-9999995, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
+                    return model;
+                }
                 return HttpResponseMessage2WSModel(ret, model);
             }
         }
-
-
+        
         public WsModel<Trequest, Tresponse> HttpResponseMessage2WSModel<Trequest, Tresponse>(HttpResponseMessage response, WsModel<Trequest, Tresponse> model)
         {
             if (response == null)
             {
-                model.ERROR("null HttpResponseMessage");
+                model.ERROR(-9999990, "Null HttpResponseMessage");
                 return model;
             }
             if (!response.IsSuccessStatusCode)
@@ -218,7 +181,7 @@ namespace QuickWebApi
         {
             if (response == null)
             {
-                model.ERROR("null HttpResponseMessage");
+                model.ERROR(-9999990, "Null HttpResponseMessage");
                 return model;
             }
             if (!response.IsSuccessStatusCode)
@@ -233,7 +196,7 @@ namespace QuickWebApi
         {
             if (response == null)
             {
-                model.ERROR("null HttpResponseMessage");
+                model.ERROR(-9999990, "Null HttpResponseMessage");
                 return model;
             }
             if (!response.IsSuccessStatusCode)

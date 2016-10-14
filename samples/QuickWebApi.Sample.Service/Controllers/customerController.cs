@@ -92,7 +92,7 @@ namespace QuickWebApi.Sample.Service.Controllers
         [HttpGet]
         public IHttpActionResult pick(int id)
         {
-            WsModel<object, customer> model = new WsModel<object, customer>();
+            WsModel<string, customer> model = new WsModel<string, customer>();
             model.Response = DB.customers.SingleOrDefault(c => c.id == id);
             return Ok(model);
         }
@@ -104,17 +104,20 @@ namespace QuickWebApi.Sample.Service.Controllers
             response_list res = new response_list();
             res.list = DB.customers.Where(c => c.id == id || c.name == name).ToArray();
             res.count = res.list.Length;
-            WsModel<object, response_list> model = HttpContext.Current.Base().ApiModel<object, response_list>(res);
+            WsModel<string, response_list> model = HttpContext.Current.Base().ApiModel<string, response_list>(null);
+            model.Response = res;
             return Ok(model);
         }
 
         [HttpPost]
         public IHttpActionResult newone(string name)
         {
+            WsModel<string, response_list> model = HttpContext.Current.Base().ApiModel<string, response_list>(name);
             response_list res = new response_list();
             res.list = DB.customers.Where(c => c.name == name).ToArray();
             res.count = res.list.Length;
-            return Ok(res);
+            model.Response = res;
+            return Ok(model);
         }
 
         [HttpPost]

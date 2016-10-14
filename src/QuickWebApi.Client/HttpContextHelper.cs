@@ -95,6 +95,13 @@ namespace QuickWebApi
             return new Api(prefix).invoke<T, Tresponse>(func);
         }
         public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+                                                                    Expression<Func<T, ApiActionS>> func, string arg,
+                                                                    string prefix = null,
+                                                                    string devicecode = "web")
+        {
+            return new Api(prefix).invoke<T, Tresponse>(func, arg);
+        }
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
                                                                     Expression<Func<T, ApiActionSSS>> func, string arg1, string arg2, string arg3,
                                                                     string prefix = null,
                                                                     string devicecode = "web")

@@ -67,5 +67,10 @@ namespace QuickWebApi.Sample.Web.Controllers
             var ret = HttpContext.ApiInvoke<icustomer>(i => i.trigger);
             return ret;
         }
+        public object newone(string name = "new hyf one")
+        {
+            var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.newone, name);
+            return ret;
+        }
     }
 }

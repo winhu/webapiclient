@@ -13,7 +13,7 @@ namespace QuickWebApi.Sample.Web
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            QuickWebApiFactory.Instance.Build_Apis();
+            QuickWebApiFactory.Instance.Build_Apis(true);
             QuickWebApiFactory.Instance.Load_Apis();
         }
     }

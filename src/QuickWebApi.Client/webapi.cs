@@ -41,11 +41,20 @@ namespace QuickWebApi
         {
             return _invoke_data<T, Trequest, Tresponse>(func.Body, model);
         }
+        public WsModel<string, Tresponse> invoke<T, String, Tresponse>(Expression<Func<T, ApiActionO<WsModel<string, Tresponse>>>> func,
+            string request)
+        {
+            return _invoke<T, Tresponse>(func.Body, request);
+        }
 
         #region 请求参数为基本类型，以url的形式进行传送，返回参数为已知类型
         public WsModel<string, Tresponse> invoke<T, Tresponse>(Expression<Func<T, ApiAction>> func)
         {
             return _invoke_data<T, string, Tresponse>(func.Body, null);
+        }
+        public WsModel<string, Tresponse> invoke<T, Tresponse>(Expression<Func<T, ApiActionS>> func, string args)
+        {
+            return _invoke<T, Tresponse>(func.Body, args);
         }
 
         public WsModel<string, Tresponse> invoke<T, Tresponse>(Expression<Func<T, ApiActionL>> func, long args1)
@@ -185,7 +194,7 @@ namespace QuickWebApi
             return _invoke<T>(func.Body, args1, args2, args3);
         }
         #endregion
-        
+
 
         protected WsModel<string> _invoke<T>(Expression exp, params object[] args)
         {
@@ -212,7 +221,7 @@ namespace QuickWebApi
                 }
             }
             var model = new WsModel<string>();
-            model.ERROR(-1, "未能找到合适的api定义");
+            model.ERROR(-9999999, "未能找到合适的api定义");
             return model;
         }
         protected WsModel<string, Tresponse> _invoke<T, Tresponse>(Expression exp, params object[] args)
@@ -240,7 +249,7 @@ namespace QuickWebApi
                 }
             }
             var model = new WsModel<string, Tresponse>();
-            model.ERROR(-1, "未能找到合适的api定义");
+            model.ERROR(-9999999, "未能找到合适的api定义");
             return model;
         }
         protected WsModel<Trequest, Tresponse> _invoke_data<T, Trequest, Tresponse>(Expression exp, WsModel<Trequest, Tresponse> model)
@@ -258,7 +267,7 @@ namespace QuickWebApi
                         if (model == null || model.Request == null || model.Request is string)
                         {
                             model = new WsModel<Trequest, Tresponse>();
-                            var ret = new Invoker(build_server(attr.service)).Invoke<Tresponse>(code, string.Empty);
+                            var ret = new Invoker(build_server(attr.service)).Invoke<Tresponse>(code, model.Request.ToString());
                             model.Response = ret.Response; ;
                             model.User = ret.User;
                             model.Secret = ret.Secret;
@@ -274,7 +283,7 @@ namespace QuickWebApi
                 }
             }
             if (model == null) model = new WsModel<Trequest, Tresponse>();
-            model.ERROR(-1, "未能找到合适的api定义");
+            model.ERROR(-9999999, "未能找到合适的api定义");
             return model;
         }
         protected WsModel<Trequest> _invoke_data<T, Trequest>(Expression exp, WsModel<Trequest> model)
@@ -294,7 +303,7 @@ namespace QuickWebApi
                 }
             }
             if (model == null) model = new WsModel<Trequest>();
-            model.ERROR(-1, "未能找到合适的api定义");
+            model.ERROR(-9999999, "未能找到合适的api定义");
             return model;
         }
 

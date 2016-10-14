@@ -34,8 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Security">
-      <HintPath>..\..\..\..\synjones\code\svn\ref\thirdparty\comext\Common.Security.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\libs\net45\Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\libs\net45\Newtonsoft.Json.dll</HintPath>

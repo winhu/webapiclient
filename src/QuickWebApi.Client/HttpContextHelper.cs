@@ -68,14 +68,17 @@ namespace QuickWebApi
             return new Api(prefix).invoke<T, Trequest, Tresponse>(
                 func,
                 context.ApiModel<Trequest, Tresponse>(request, devicecode));
+        }
+        public static WsModel<string, Tresponse> ApiInvoke<T, Tresponse>(this HttpContextBase context,
+            Expression<Func<T, ApiActionO<WsModel<string, Tresponse>>>> func,
+            string request,
+            string prefix = null,
+            string devicecode = "web")
+        {
 
-            //return new webapi<T, Trequest, Tresponse>(prefix).invoke(
-            //    func,
-            //    context.ApiModel<Trequest, Tresponse>(request, devicecode));
-
-            //return new webapi<T, ws_model<Trequest, Tresponse>>(prefix).invoke(
-            //    func,
-            //    context.ApiModel<Trequest, Tresponse>(request, devicecode));
+            return new Api(prefix).invoke<T, string, Tresponse>(
+                func,
+                context.ApiModel<string, Tresponse>(request, devicecode));
         }
 
         public static WsModel<Trequest> ApiInvoke<T, Trequest>(this HttpContextBase context,

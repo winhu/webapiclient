@@ -41,7 +41,7 @@ namespace QuickWebApi
         {
             return _invoke_data<T, Trequest, Tresponse>(func.Body, model);
         }
-        public WsModel<string, Tresponse> invoke<T, String, Tresponse>(Expression<Func<T, ApiActionO<WsModel<string, Tresponse>>>> func,
+        public WsModel<string, Tresponse> invoke<T, Tresponse>(Expression<Func<T, ApiActionO<WsModel<string, Tresponse>>>> func,
             string request)
         {
             return _invoke<T, Tresponse>(func.Body, request);
@@ -264,20 +264,21 @@ namespace QuickWebApi
                     var attr = m.Type.GetCustomAttribute<WebApiAttribute>();
                     if (attr != null)
                     {
-                        if (model == null || model.Request == null || model.Request is string)
-                        {
-                            model = new WsModel<Trequest, Tresponse>();
-                            var ret = new Invoker(build_server(attr.service)).Invoke<Tresponse>(code, model.Request.ToString());
-                            model.Response = ret.Response; ;
-                            model.User = ret.User;
-                            model.Secret = ret.Secret;
-                            model.Client = ret.Client;
-                            model.Time = ret.Time;
-                            model.Signature = ret.Signature;
-                            model.ErrCode = ret.ErrCode;
-                            model.ErrMsg = ret.ErrMsg;
-                            return model;
-                        }
+                        //if (model.Request.GetType().IsValueType || model.Request is string)
+                        //{
+                        //    //var ret = _invoke<T, Tresponse>(exp, model.Request);
+                        //    var ret = new Invoker(build_server(attr.service)).Invoke<Tresponse>(code, model.Request);
+                        //    model = new WsModel<Trequest, Tresponse>();
+                        //    model.Response = ret.Response; ;
+                        //    model.User = ret.User;
+                        //    model.Secret = ret.Secret;
+                        //    model.Client = ret.Client;
+                        //    model.Time = ret.Time;
+                        //    model.Signature = ret.Signature;
+                        //    model.ErrCode = ret.ErrCode;
+                        //    model.ErrMsg = ret.ErrMsg;
+                        //    return model;
+                        //}
                         return new Invoker(build_server(attr.service)).Invoke<Trequest, Tresponse>(code, model);
                     }
                 }

@@ -16,6 +16,8 @@ namespace QuickWebApi.Sample.Apis
         IHttpActionResult pick(int id);
         [WebApi(MethodType.HTTPGET, "用户列表", "列举所有用户", typeof(response_list))]
         IHttpActionResult list();
+        [WebApi(MethodType.HTTPPOST, "更新用户", "更新用户信息")]
+        IHttpActionResult querybyname(WsModel<string, response_list> model);
         [WebApi(MethodType.HTTPGET, "用户列表", "列举所有用户", typeof(response_list))]
         IHttpActionResult query(int id, string name);
         [WebApi(MethodType.HTTPPOST, "用户信息", "获取指定用户信息", typeof(customer))]

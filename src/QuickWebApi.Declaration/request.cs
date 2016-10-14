@@ -130,7 +130,7 @@ namespace QuickWebApi
 
                     var param = new string[] { Nonce, Timestamp.ToString(), _secret, Ip, Realm };
                     Array.Sort(param);
-                    var _sign = String.Join(null, param);
+                    _signature = String.Join(null, param).ToSHA1();
                 }
                 return _signature;
             }

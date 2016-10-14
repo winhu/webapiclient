@@ -34,9 +34,6 @@ namespace QuickWebApi
 
         public WsModel<Trequest, Tresponse> Invoke<Trequest, Tresponse>(string requestUri, WsModel<Trequest, Tresponse> model, MethodType mtd)
         {
-            if (model == null)
-                model = new WsModel<Trequest, Tresponse>();
-
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -49,18 +46,16 @@ namespace QuickWebApi
                     ret = client.PutAsJsonAsync(requestUri, model).Result;
                 else
                 {
-
+                    if (model == null) model = new WsModel<Trequest, Tresponse>();
                     model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
                     return model;
                 }
-                return HttpResponseMessage2WSModel(ret, model);
+                return HttpResponseMessage2WSModel<Trequest, Tresponse>(ret);
             }
         }
 
         public WsModel<Trequest> Invoke<Trequest>(string requestUri, WsModel<Trequest> model, MethodType mtd)
         {
-            if (model == null)
-                model = new WsModel<Trequest>();
 
             using (var client = new HttpClient())
             {
@@ -76,19 +71,17 @@ namespace QuickWebApi
                 //    ret = client.PostAsJsonAsync(requestUri, model).Result;
                 else
                 {
-
+                    if (model == null)
+                        model = new WsModel<Trequest>();
                     model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
                     return model;
                 }
-                return HttpResponseMessage2WSModel(ret, model);
+                return HttpResponseMessage2WSModel<Trequest>(ret);
             }
         }
 
         public WsModel Invoke(string requestUri, WsModel model, MethodType mtd)
         {
-            if (model == null)
-                model = new WsModel();
-
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -101,19 +94,19 @@ namespace QuickWebApi
                     ret = client.PutAsJsonAsync(requestUri, model).Result;
                 else
                 {
-
+                    if (model == null)
+                        model = new WsModel();
                     model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
                     return model;
                 }
 
-                return HttpResponseMessage2WSModel(ret, model);
+                return HttpResponseMessage2WSModel(ret);
             }
         }
 
         public WsModel<string, Tresponse> Invoke<Tresponse>(string requestUri, string data, MethodType mtd)
         {
-            WsModel<string, Tresponse> model = new WsModel<string, Tresponse>();
-
+            WsModel<string, Tresponse> model = null;
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -128,18 +121,19 @@ namespace QuickWebApi
                     ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri, data)).Result;
                 else
                 {
-
+                    model = new WsModel<string, Tresponse>();
                     model.ERROR(-9999990, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
                     return model;
                 }
-                return HttpResponseMessage2WSModel(ret, model);
+                model = HttpResponseMessage2WSModel<string, Tresponse>(ret);
+                model.Request = data;// string.Format("{0}:{1}/{2}", mtd.ToString(), _uri.AbsoluteUri, requestUri);
+                return model;
             }
         }
 
         public WsModel<string> Invoke(string requestUri, string data, MethodType mtd)
         {
-            WsModel<string> model = new WsModel<string>();
-
+            WsModel<string> model = null;
             using (var client = new HttpClient())
             {
                 Append_Header(client);
@@ -154,53 +148,61 @@ namespace QuickWebApi
                     ret = client.DeleteAsync(string.Format("{0}?{1}", requestUri, data)).Result;
                 else
                 {
-
+                    if (model == null) model = new WsModel<string>();
                     model.ERROR(-9999995, string.Format("{0}/{1}未配置{2}请求", _uri.AbsoluteUri, requestUri, mtd.ToString()));
                     return model;
                 }
-                return HttpResponseMessage2WSModel(ret, model);
+                model = HttpResponseMessage2WSModel<string>(ret);
+                model.Request = data;// string.Format("{0}:{1}/{2}", mtd.ToString(), _uri.AbsoluteUri, requestUri);
+                return model;
             }
         }
-        
-        public WsModel<Trequest, Tresponse> HttpResponseMessage2WSModel<Trequest, Tresponse>(HttpResponseMessage response, WsModel<Trequest, Tresponse> model)
+
+        public WsModel<Trequest, Tresponse> HttpResponseMessage2WSModel<Trequest, Tresponse>(HttpResponseMessage response)
         {
             if (response == null)
             {
+                var model = new WsModel<Trequest, Tresponse>();
                 model.ERROR(-9999990, "Null HttpResponseMessage");
                 return model;
             }
             if (!response.IsSuccessStatusCode)
             {
+                var model = new WsModel<Trequest, Tresponse>();
                 model.ERROR((int)response.StatusCode, response.ReasonPhrase);
                 return model;
             }
             return response.Content.ReadAsAsync<WsModel<Trequest, Tresponse>>().Result;
         }
 
-        public WsModel<Trequest> HttpResponseMessage2WSModel<Trequest>(HttpResponseMessage response, WsModel<Trequest> model)
+        public WsModel<Trequest> HttpResponseMessage2WSModel<Trequest>(HttpResponseMessage response)
         {
             if (response == null)
             {
+                WsModel<Trequest> model = new WsModel<Trequest>();
                 model.ERROR(-9999990, "Null HttpResponseMessage");
                 return model;
             }
             if (!response.IsSuccessStatusCode)
             {
+                WsModel<Trequest> model = new WsModel<Trequest>();
                 model.ERROR((int)response.StatusCode, response.ReasonPhrase);
                 return model;
             }
             return response.Content.ReadAsAsync<WsModel<Trequest>>().Result;
         }
 
-        public WsModel HttpResponseMessage2WSModel(HttpResponseMessage response, WsModel model)
+        public WsModel HttpResponseMessage2WSModel(HttpResponseMessage response)
         {
             if (response == null)
             {
+                WsModel model = new WsModel();
                 model.ERROR(-9999990, "Null HttpResponseMessage");
                 return model;
             }
             if (!response.IsSuccessStatusCode)
             {
+                WsModel model = new WsModel();
                 model.ERROR((int)response.StatusCode, response.ReasonPhrase);
                 return model;
             }

@@ -40,6 +40,15 @@ namespace QuickWebApi.Sample.Service.Controllers
             return Ok(model);
         }
 
+        public IHttpActionResult querybyname(WsModel<string, response_list> model)
+        {
+            response_list lst = new response_list();
+            lst.list = DB.customers.Where(c => c.name == model.Request).ToArray();
+            lst.count = lst.list.Count();
+            model.Response = lst;
+            return Ok(model);
+        }
+
         [HttpPost]
         public IHttpActionResult info(WsModel<int> model)
         {
@@ -125,5 +134,6 @@ namespace QuickWebApi.Sample.Service.Controllers
         {
             return Ok(HttpContext.Current.Base().ApiModel());
         }
+
     }
 }

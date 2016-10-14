@@ -22,6 +22,11 @@ namespace QuickWebApi.Sample.Web.Controllers
             var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.query, id, name);
             return ret;
         }
+        public object queryname(string name = "name3")
+        {
+            var ret = HttpContext.ApiInvoke<icustomer, response_list>(i => i.querybyname, name);
+            return ret;
+        }
         public object query1(int id = 2, string name = "name3")
         {
             var ret = HttpContext.ApiInvoke<icustomer>(i => i.query, id, name);

@@ -12,10 +12,65 @@ namespace QuickWebApi
 
     public static class HttpContextHelper
     {
-        public static HttpContextBase Base(this HttpContext context)
+        //public static HttpContextBase Base(this HttpContext context)
+        //{
+        //    return new HttpContextWrapper(context).SetUser(null);
+        //}
+        internal const string ___wsmodel_user_session_key___ = "___wsmodel_user_session_key___";
+        internal const string ___wsmodel_secret_session_key___ = "___wsmodel_secret_session_key___";
+        public static HttpContextBase Base(this HttpContext context, User user = null)
         {
-            return new HttpContextWrapper(context);
+            return new HttpContextWrapper(context).SetUser(user);
         }
+        public static HttpContextBase SetUser(this HttpContextBase context, User user)
+        {
+            context.Session[___wsmodel_user_session_key___] = user;
+            return context;
+        }
+        public static HttpContextBase SetSecret(this HttpContextBase context, Secret secret)
+        {
+            context.Session[___wsmodel_secret_session_key___] = secret;
+            return context;
+        }
+        //public static HttpContext SetUser(this HttpContext context, User user)
+        //{
+        //    context.Session[___wsmodel_user_session_key___] = user;
+        //    return context;
+        //}
+        public static HttpContextBase SetUser(this HttpContextBase context, string key, string tkt, string uid, string syscode, string orgcode)
+        {
+            context.Session[___wsmodel_user_session_key___] = new User(key, tkt, uid, orgcode, syscode);
+            return context;
+        }
+        public static HttpContextBase SetSecret(this HttpContextBase context, string secret, string access_token)
+        {
+            context.Session[___wsmodel_secret_session_key___] = new Secret(secret).SetKey(secret).SetToken(access_token).Set(context.GetIP(), context.Request.Url.Authority);
+            return context;
+        }
+        //public static HttpContext SetUser(this HttpContext context, string key, string tkt, string uid, string syscode, string orgcode, string secret, string access_token)
+        //{
+        //    context.Session[___wsmodel_user_session_key___] = new User(key, tkt, uid, orgcode, syscode);
+        //    return context;
+        //}
+
+        public static User GetUser(this HttpContextBase context)
+        {
+            var user = context.Session[___wsmodel_user_session_key___];
+            if (user != null) return user as User;
+            return new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+        }
+        public static Secret GetSecret(this HttpContextBase context)
+        {
+            var secret = context.Session[___wsmodel_secret_session_key___];
+            if (secret != null) return secret as Secret;
+            return new Secret().Set(context.GetIP(), context.Request.Url.Authority);
+        }
+        //public static User GetUser(this HttpContext context)
+        //{
+        //    var user = context.Session[___wsmodel_user_session_key___];
+        //    if (user == null) return new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+        //    return user as User;
+        //}
 
         #region READY
         public static Client GetClientInfo(this HttpContextBase context, string devicecode = "web", string deviceinfo = null)
@@ -26,24 +81,27 @@ namespace QuickWebApi
         public static WsModel ApiModel(this HttpContextBase context, string devicecode = "web")
         {
             WsModel model = new WsModel();
-            model.Client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
-            model.User = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            model.Client = context.GetClientInfo(devicecode);// new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.User = context.GetUser();
+            model.Secret = context.GetSecret();
             return model;
         }
         public static WsModel<Trequest> ApiModel<Trequest>(this HttpContextBase context, Trequest request, string devicecode = "web")
         {
             WsModel<Trequest> model = new WsModel<Trequest>();
             model.Request = request;
-            model.Client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
-            model.User = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            model.Client = context.GetClientInfo(devicecode);// new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.User = context.GetUser();
+            model.Secret = context.GetSecret();
             return model;
         }
         public static WsModel<Trequest, Tresponse> ApiModel<Trequest, Tresponse>(this HttpContextBase context, Trequest request, string devicecode = "web")
         {
             WsModel<Trequest, Tresponse> model = new WsModel<Trequest, Tresponse>();
             model.Request = request;
-            model.Client = new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
-            model.User = new User(context.Session.SessionID, context.Session[context.Session.SessionID]);
+            model.Client = context.GetClientInfo(devicecode);// new Client(context.GetIP(), null, null, devicecode, context.Request.Browser.Id);
+            model.User = context.GetUser();
+            model.Secret = context.GetSecret();
             return model;
         }
         #endregion

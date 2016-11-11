@@ -47,51 +47,34 @@ namespace QuickWebApi
     public class Secret
     {
         public Secret()
-        {
-            nonce = Guid.NewGuid().ToString("N");
-            time = DateTime.Now;
-        }
-        string _nonce;
-        DateTime _time = DateTime.Now;
-        public string nonce
-        {
-            get
-            {
-                var n = _nonce;
-                _nonce = Guid.NewGuid().ToString("N");
-                return n;
-            }
-            set { _nonce = value; }
-        }
-        public DateTime time
-        {
-            get
-            {
-                var n = _time;
-                _time = DateTime.Now;
-                return n;
-            }
-            set { _time = value; }
-        }
-    }
-
-    public class TokenRequest
-    {
-        public TokenRequest(string secret)
+        { Timestamp = DateTime.Now; }
+        public Secret(string secret)
         {
             _secret = secret;
+            Timestamp = DateTime.Now;
         }
-        public TokenRequest Set(string ip, string realm)
+        public Secret Set(string ip, string realm)
         {
             Ip = ip;
             Realm = realm;
+            Timestamp = DateTime.Now;
+            return this;
+        }
+        public Secret SetToken(string access_token)
+        {
+            AccessToken = access_token;
+            return this;
+        }
+        public Secret SetKey(string access_token)
+        {
+            AccessToken = access_token;
             return this;
         }
 
-        string _nonce, _crypt, _signature, _secret;
-        long _timestamp = DateTime.Now.Ticks;
+        string _nonce, _signature, _secret;
         public string Ip { get; set; }
         public string Realm { get; set; }
+        public string AccessToken { get; set; }
 
         public string Nonce
         {
@@ -107,20 +90,7 @@ namespace QuickWebApi
                     _nonce = value;
             }
         }
-        public long Timestamp
-        {
-            get
-            {
-                if (_timestamp == 0)
-                    _signature = Guid.NewGuid().ToString("N");
-                return _timestamp;
-            }
-            set
-            {
-                if (_timestamp == 0)
-                    _timestamp = value;
-            }
-        }
+        public DateTime Timestamp { get; set; }
         public string Signature
         {
             get
@@ -128,7 +98,7 @@ namespace QuickWebApi
                 if (string.IsNullOrWhiteSpace(_signature))
                 {
 
-                    var param = new string[] { Nonce, Timestamp.ToString(), _secret, Ip, Realm };
+                    var param = new string[] { Nonce, Timestamp.ToString("yyyyMMddHHmmss"), _secret, Ip, Realm };
                     Array.Sort(param);
                     _signature = String.Join(null, param).ToSHA1();
                 }
@@ -138,20 +108,6 @@ namespace QuickWebApi
             {
                 if (string.IsNullOrWhiteSpace(_signature))
                     _signature = value;
-            }
-        }
-        public string Crypt
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_crypt))
-                    _crypt = Guid.NewGuid().ToString("N");
-                return _crypt;
-            }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(_crypt))
-                    _crypt = value;
             }
         }
     }

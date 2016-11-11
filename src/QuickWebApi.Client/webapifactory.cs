@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Xml;
 using System.Xml.Serialization;
@@ -108,6 +109,12 @@ namespace QuickWebApi
 
         public WebApiNode[] AllApi { get { return apis.ToArray(); } }
 
+        static Func<HttpContextBase, User> _func_;
+        public void Set_User_DependencyReslover(Func<HttpContextBase, User> func)
+        {
+            _func_ = func;
+        }
+
         public void Register_JsonFormatter(HttpConfiguration config)
         {
             // Web API configuration and services
@@ -128,7 +135,7 @@ namespace QuickWebApi
 
         public string Load_Apis()
         {
-            var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "apis_*.xml", System.IO.SearchOption.AllDirectories);
+            var files = System.IO.Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "apidoc"), "apis_*.xml", System.IO.SearchOption.AllDirectories);
             apis.Clear();
             foreach (var path in files)
             {

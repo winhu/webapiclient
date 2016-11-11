@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,18 @@ using System.Web;
 
 namespace QuickWebApi
 {
-    public class WxSuperModel { }
+    public class WxSuperModel
+    {
+        public string Dump()
+        {
+            using (StringWriter stream = new StringWriter())
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(stream, this);
+                return stream.ToString();
+            }
+        }
+    }
     public class WsModel<Trequest, Tresponse> : WxSuperModel
     {
         public WsModel()
@@ -80,6 +92,8 @@ namespace QuickWebApi
         public Client Client { get; set; }
         public User User { get; set; }
         public Secret Secret { get; set; }
+        //public TokenRequest Token { get; set; }
+
         public string Signature
         {
             get
@@ -109,11 +123,13 @@ namespace QuickWebApi
 
         public bool ValidRequest()
         {
+            if (Response == null) return false;
             if (Request.GetType().IsValueType) return true;
             return Request != null;
         }
         public bool ValidResponse()
         {
+            if (Response == null) return false;
             if (Response.GetType().IsValueType) return true;
             return Response != null;
         }

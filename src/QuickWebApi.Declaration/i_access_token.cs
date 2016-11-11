@@ -15,7 +15,7 @@ namespace QuickWebApi
         /// </summary>
         /// <returns></returns>
         [WebApi(MethodType.HTTPPOST, "", "获取安全票据")]
-        IHttpActionResult get(TokenRequest request);
+        IHttpActionResult get(Secret secret);
 
         /// <summary>
         /// 获取服务端时间

@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="Common.Security">
       <HintPath>..\..\libs\net45\Common.Security.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\libs\net45\Newtonsoft.Json.dll</HintPath>

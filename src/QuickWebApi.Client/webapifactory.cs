@@ -128,7 +128,7 @@ namespace QuickWebApi
 
         public string Load_Apis()
         {
-            var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "apis_*.xml", System.IO.SearchOption.AllDirectories);
+            var files = System.IO.Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "apidoc"), "apis_*.xml", System.IO.SearchOption.AllDirectories);
             apis.Clear();
             foreach (var path in files)
             {

@@ -26,6 +26,7 @@ namespace QuickWebApi.Sample.Service.Controllers
 
     [Route("api/customer_service/{action}/")]
     //[Authorize]
+    [WebApiAuthorize]
     public class customerController : ApiController, icustomer
     {
         [HttpGet]
@@ -42,6 +43,8 @@ namespace QuickWebApi.Sample.Service.Controllers
 
         public IHttpActionResult querybyname(WsModel<string, response_list> model)
         {
+            request_update req = new request_update();
+            WsModel<request_update, com_result> r = HttpContext.Current.Base(model.User).ApiInvoke<icustomer, request_update, com_result>(i => i.update, req);
             response_list lst = new response_list();
             lst.list = DB.customers.Where(c => c.name == model.Request).ToArray();
             lst.count = lst.list.Count();

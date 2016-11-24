@@ -13,8 +13,15 @@ namespace QuickWebApi.Sample.Web
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            //DependencyResolver.SetResolver(IDependencyResolver
+            //QuickWebApiFactory.Instance.Set_User_DependencyReslover(solver);
             QuickWebApiFactory.Instance.Build_Apis(true);
             QuickWebApiFactory.Instance.Load_Apis();
         }
+        //public static User solver(HttpContextBase context) {
+        //    //context.
+        //}
     }
+
 }

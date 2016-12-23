@@ -20,6 +20,7 @@ namespace QuickWebApi
         internal const string ___wsmodel_secret_session_key___ = "___wsmodel_secret_session_key___";
         public static HttpContextBase Base(this HttpContext context, User user = null)
         {
+            if (user == null) return new HttpContextWrapper(context);
             return new HttpContextWrapper(context).SetUser(user);
         }
         public static HttpContextBase SetUser(this HttpContextBase context, User user)

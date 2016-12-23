@@ -21,21 +21,29 @@ namespace QuickWebApi
             return HttpRuntime.Cache[CacheKey];
         }
 
+        protected override bool IsAuthorized(System.Web.Http.Controllers.HttpActionContext actionContext)
+        {
+            bool result = base.IsAuthorized(actionContext);
+            Console.WriteLine(result);
+            return true;
+        }
+
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            base.OnAuthorization(actionContext);
             var s = actionContext.Request.Content.ReadAsStringAsync();
             s.Wait();
 
             var msg = ValidRequest(s.Result);
-            if (string.IsNullOrWhiteSpace(msg)) return;
-
-            HttpResponseMessage message = new HttpResponseMessage
+            if (!string.IsNullOrWhiteSpace(msg))
             {
-                Content = new StringContent(msg, Encoding.GetEncoding("UTF-8"), "application/json"),
-                StatusCode = HttpStatusCode.Unauthorized
-            };
-            actionContext.Response = message;
+                HttpResponseMessage message = new HttpResponseMessage
+                {
+                    Content = new StringContent(msg, Encoding.GetEncoding("UTF-8"), "application/json"),
+                    StatusCode = HttpStatusCode.Unauthorized
+                };
+                actionContext.Response = message;
+            }
+            base.OnAuthorization(actionContext);
         }
 
         private void SetCache(string CacheKey, object objObject, double expires_in)
@@ -48,7 +56,7 @@ namespace QuickWebApi
             WsModel model = Prepare(requestdata);
             if (model == null) return "Unauthorized Data";
             return ValidAccessToken(model.User.SysCode, model.Client.Ip, model.Secret.AccessToken) ??
-                    ValidUser(model.User.Ticket, model.User.Uid, model.User.Uid);
+                    ValidUser(model.User.Ticket, model.User.Uid, model.User.SessionId);
         }
 
         public virtual WsModel Prepare(string requestdata)
